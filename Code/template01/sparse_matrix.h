@@ -16,6 +16,8 @@
 #include <map>
 #include "vector.h"
 
+using namespace std;
+
 
 class SparseMatrixIteratorRegistry;
 
@@ -88,6 +90,10 @@ class SparseMatrix
 		template <bool is_const>
 		class RowIteratorBase
 		{
+			private:
+				size_t vectorPosition;
+				size_t fakeColumnPosition;
+
 			public:
 				/// Constructor with row; set to first col
 				RowIteratorBase(typename iterator_traits<is_const>::matrix_type& mat, std::size_t rowIndex);

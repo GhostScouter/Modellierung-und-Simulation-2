@@ -30,7 +30,7 @@ SparseMatrix::SparseMatrix(std::size_t r, std::size_t c, std::size_t rowCapacity
 	rows = r;
 	columns = c;
 
-	colInds = new double [vectorSize];
+	colInds = new size_t [vectorSize];
 	values = new double [vectorSize];
 	for(int i=0; i < vectorSize; ++i){
 		colInds[i] = -1;
@@ -374,5 +374,7 @@ int main()
 	
 	brot.resize(10,2,0);
 	brot.printMatrix();
+
+	return 0;
 
 }
