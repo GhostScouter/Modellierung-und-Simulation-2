@@ -52,9 +52,25 @@ std::size_t SparseMatrix::num_rows() const
 }
 
 
+
 std::size_t SparseMatrix::num_cols() const
 {
 	return columns;
+}
+
+std::size_t SparseMatrix::num_capacity() const
+{
+	return capacity;
+}
+
+std::size_t* SparseMatrix::num_colInds() const
+{
+	return colInds;
+}
+
+double* SparseMatrix::num_values() const
+{
+	return values;
 }
 
 
@@ -162,15 +178,10 @@ void SparseMatrix::resize(std::size_t r, std::size_t c, double defVal)
 }
 
 
-
-template<bool is_const>
-SparseMatrix::RowIteratorBase<is_const>::RowIteratorBase
-(
-	typename iterator_traits<is_const>::matrix_type& mat,
-	std::size_t rowIndex
-)
+template<bool is_const>SparseMatrix::RowIteratorBase<is_const>::RowIteratorBase
+(typename iterator_traits<is_const>::matrix_type& mat,std::size_t rowIndex)
 {
-	vectorPosition = (rowIndex - 1) * capacity;
+	vectorPosition = (rowIndex - 1) * mat.capacity;
 	fakeColumnPosition = 0;
 }
 
@@ -183,15 +194,15 @@ SparseMatrix::RowIteratorBase<is_const>::RowIteratorBase
 	std::size_t startFromCol
 )
 {
-	for (size_t i; ((rowIndex-1)*capacity) < i <(rowIndex*capacity); i++){		// suche im Bereich der Reihe nach Eintrag
-		if (colInds[i] = startFromCol){
+	for (size_t i; ((rowIndex-1)*mat.capacity) < i <(rowIndex*mat.capacity); i++){		// suche im Bereich der Reihe nach Eintrag
+		if (mat.colInds[i] = startFromCol){
 			vectorPosition = i;
 		}
-		else if (colInds[i] > startFromCol){									// ein größerer Eintrag gefunden => Die Spalte ist leer!
+		else if (mat.colInds[i] > startFromCol){									// ein größerer Eintrag gefunden => Die Spalte ist leer!
 			vectorPosition = i;													// gehe in den nächsten Eintrag um Fortschritt zu garantieren
 		}
 		else{
-			vectorPosition = (rowIndex - 1) * capacity;							// bleibe in Zeile am ersten Eintrag. Der ++-operator stellt eine effektive Suche sicher
+			vectorPosition = (rowIndex - 1) * mat.capacity;							// bleibe in Zeile am ersten Eintrag. Der ++-operator stellt eine effektive Suche sicher
 		}
 	}
 	fakeColumnPosition = startFromCol;
@@ -226,11 +237,11 @@ SparseMatrix::RowIteratorBase<is_const>& SparseMatrix::RowIteratorBase<is_const>
 {
 	fakeColumnPosition = fakeColumnPosition + 1;			// wir suchen nun eine Spalte weiter rechts
 
-	if (fakeColumnPosition > columns - 1){					// wenn wir weiter rechts sind, als wir Spalten haben, müssen wir "in die nächste Zeile"
+	if (fakeColumnPosition > (underlyingMatrix -> num_cols()-1) - 1){	// wenn wir weiter rechts sind, als wir Spalten haben, müssen wir "in die nächste Zeile"
 		fakeColumnPosition = 0;								// nur jetzt, dürfen wir in den nächsten "Zeilenabschnitt" im Vektor
 	}
 
-	if (fakeColumnPosition <= colInds[vectorPosition]){		// wenn wir an richtiger Stelle sind, dannverweilen wir
+	if (fakeColumnPosition <= (underlyingMatrix -> num_colInds())[vectorPosition]){		// wenn wir an richtiger Stelle sind, dannverweilen wir
 		vectorPosition = vectorPosition;
 	}
 
@@ -242,7 +253,7 @@ SparseMatrix::RowIteratorBase<is_const>& SparseMatrix::RowIteratorBase<is_const>
 		// 			Ausnahme der Ausnahme: Falls wir einen Passiergschein haben:
 		//			aka. (fakeColumnPosition = 0) aka. Reihenende der Matrix erreicht, dann dürfen wir weiter
 
-		if ((vectorPosition + 1) % capacity == 0){
+		if ((vectorPosition + 1) % (underlyingMatrix -> num_capacity()) == 0){
 			
 			if (fakeColumnPosition = 0){
 				vectorPosition = vectorPosition + 1;
@@ -260,37 +271,25 @@ SparseMatrix::RowIteratorBase<is_const>& SparseMatrix::RowIteratorBase<is_const>
 	}
 }
 
+
 template<bool is_const>
 typename SparseMatrix::iterator_traits<is_const>::entry_type SparseMatrix::RowIteratorBase<is_const>::value() const
 {
-	if(fakeColumnPosition == colInds[vectorPosition]){
-
-		return values[vectorPosition];
-	}
-	else{
-		return 0;
-	}
-
+return (underlyingMatrix -> num_values())[vectorPosition];
 }
 
 template<bool is_const>
 typename SparseMatrix::iterator_traits<is_const>::entry_type& SparseMatrix::RowIteratorBase<is_const>::value()
 {
-	if(fakeColumnPosition == colInds[vectorPosition]){
-
-		return values[vectorPosition];
-	}
-	else{
-		return 0;
-	}
+return (underlyingMatrix -> num_values())[vectorPosition];
 }
+
 
 template<bool is_const>
 std::size_t SparseMatrix::RowIteratorBase<is_const>::col_index() const
 {
 	return fakeColumnPosition;
 }
-
 
 
 SparseMatrix::RowIterator SparseMatrix::begin(std::size_t r)
@@ -343,7 +342,13 @@ double SparseMatrix::operator()(std::size_t r, std::size_t c) const
 
 double& SparseMatrix::operator()(std::size_t r, std::size_t c)
 {
-	// todo: implement
+	for (size_t i; ((r-1)*capacity) < i <(r*capacity); i++){
+		if(colInds[i] == c){
+			return values[i];
+		}
+	}
+	double x = 0;
+	return x;
 }
 
 
@@ -362,6 +367,7 @@ std::ostream& operator<<(std::ostream& stream, const SparseMatrix& m)
 
 
 
+
 // explicit template instantiations
 template class SparseMatrix::RowIteratorBase<true>;
 template class SparseMatrix::RowIteratorBase<false>;
@@ -369,12 +375,7 @@ template class SparseMatrix::RowIteratorBase<false>;
 int main()
 {
 
-	SparseMatrix brot (5,5,2);
-	brot.printMatrix();
-	
-	brot.resize(10,2,0);
-	brot.printMatrix();
-
+	cout << "lol";
 	return 0;
-
 }
+

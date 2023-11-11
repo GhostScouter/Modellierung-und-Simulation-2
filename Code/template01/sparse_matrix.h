@@ -24,7 +24,7 @@ class SparseMatrixIteratorRegistry;
 
 class SparseMatrix
 {
-	private:
+	public:
 
 		size_t capacity;
 		size_t rows;
@@ -55,6 +55,16 @@ class SparseMatrix
 
 		/// Return number of columns
 		std::size_t num_cols() const;
+
+		/// Return capacity
+		std::size_t num_capacity() const;
+
+		/// Return capacity
+		std::size_t* num_colInds() const;
+
+		/// Return capacity
+		double* num_values() const;
+
 
 		SparseMatrix& printMatrix();
 
@@ -95,6 +105,11 @@ class SparseMatrix
 				size_t fakeColumnPosition;
 
 			public:
+				size_t vectorPosition;
+				size_t fakeColumnPosition;
+			    typename std::conditional<is_const, const SparseMatrix*, SparseMatrix*>::type underlyingMatrix;
+
+			public:
 				/// Constructor with row; set to first col
 				RowIteratorBase(typename iterator_traits<is_const>::matrix_type& mat, std::size_t rowIndex);
 
@@ -130,7 +145,7 @@ class SparseMatrix
 
 				friend class SparseMatrix;
 
-			private:
+			public:
 				typename iterator_traits<is_const>::entry_type* pCurVal;
 				const std::size_t* pCurInd;
 		};
