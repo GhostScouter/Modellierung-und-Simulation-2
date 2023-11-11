@@ -86,7 +86,6 @@ Vector Vector::operator+(const Vector& v) const
 {
     double newFilling = vectorFilling + v.vectorFilling;
 	cout << newFilling << endl;
-	Vector v(vectorSize, 0);
     return Vector (vectorSize, newFilling); // Return a new instance of vector
 }
 

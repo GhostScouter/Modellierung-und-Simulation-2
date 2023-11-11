@@ -246,6 +246,7 @@ Vector Matrix::operator*(Vector v) const
 template class Matrix::RowIteratorBase<true>;
 template class Matrix::RowIteratorBase<false>;
 
+/*
 int main() {
 
 	Matrix testMatrix(1,1,1);
@@ -268,3 +269,4 @@ int main() {
 
 	return 0;
 }
+*/
