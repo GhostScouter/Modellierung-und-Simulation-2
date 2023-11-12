@@ -8,16 +8,15 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include "vector.h"
 #include <iostream>
 
 
 class Matrix
 {
 	private:
-		int rows;
-		int columns;
-		double** matrix;
+		size_t m_rows;
+		size_t m_cols;
+		Vector m_mat;
 
 	public:
 		/** @brief Constructor without arguments
@@ -30,6 +29,8 @@ class Matrix
 		 *	are to be initialized with the given default value (0.0 if not given).
 		**/
 		Matrix(std::size_t r, std::size_t c, double val = 0.0);
+
+		Matrix(const Matrix&);
 
 		/// Destructor
 		virtual ~Matrix();
@@ -75,10 +76,9 @@ class Matrix
 		{
 			public:
 
-			    typename std::conditional<is_const, const Matrix*, Matrix*>::type underlyingMatrix;
-				int rowPosition;
-				int colPosition;
-				double content;
+			    typename std::conditional<is_const, const Matrix*, Matrix*>::type pMat;
+				size_t pRowIdx;
+				size_t pColIdx;
 
 			public:
 				/// Constructor with row; set to first col
@@ -109,7 +109,7 @@ class Matrix
 				typename iterator_traits<is_const>::entry_type value() const;
 
 				/// value the iterator points to
-				typename iterator_traits<is_const>::entry_type& value();
+				typename iterator_traits<is_const>::entry_type value();
 
 				/// column the iterator points to
 				std::size_t col_index() const;
@@ -152,6 +152,9 @@ class Matrix
 		 * The result is returned in a new instance.
 		 */
 		Vector operator*(Vector v) const;
+
+		void clear();
+
 };
 
 
