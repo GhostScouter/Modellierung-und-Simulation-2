@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.7)
+cmake_minimum_required (VERSION 3.2)
 project (ModSim2)
 
 ## options
@@ -19,7 +19,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif()
 set(exclude_warnings "-Wno-unused-parameter")
 set(warnings "-Wall -Wextra")
-set(cxx_flags "${warnings} ${exclude_warnings} ${additionalFlags} -pedantic -std=c++11")
+set(cxx_flags "${warnings} ${exclude_warnings} ${additionalFlags} -pedantic -std=c++17")
 
 if (DEBUG)
 	set(cxx_flags "${cxx_flags} -g -D__DEBUG__ -O0")
@@ -36,15 +36,20 @@ set(linkLibraries)
 
 ## ADD ANY SOURCE FILES FOR LIBRARY HERE ##
 set(SOURCES
-	vector.cpp
-	matrix.cpp
-	sparse_matrix.cpp
+		vector.cpp
+		matrix.cpp
+		sparse_matrix.cpp
+
+		iterative_solver.cpp
+		lu_solver.cpp
+		jacobi.cpp
+	gauss_seidel.cpp
 )
 
 add_library(modsim2 ${SOURCES} ${linkLibraries})
 
 
 ## targets
-add_executable(execMain01 main01_19.cpp)
-target_link_libraries(execMain01 modsim2 ${linkLibraries})
+add_executable(executable02 main01.cpp)
+target_link_libraries(executable02 modsim2 ${linkLibraries})
 
