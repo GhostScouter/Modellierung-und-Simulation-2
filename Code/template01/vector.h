@@ -16,9 +16,9 @@ class Vector: public std::vector<double>
 {
 
 	public:
-    double* vector; // Member variable to hold the array
-    int vectorSize; // Member variable to hold the size of the array
-	double vectorFilling; // Member variable with the value that the array contains at all positions
+    double* vector; 		// Member variable to hold the array
+    int vectorSize; 		// Member variable to hold the size of the array
+	double vectorFilling; 	// Member variable with the value that the array contains at all positions
 
 	public:
 
@@ -68,9 +68,6 @@ class Vector: public std::vector<double>
 
 		/// Euclidean norm
 		double norm();
-
-    	// Declare the size() member function
-    	std::size_t size() const;
 };
 
 //std::ostream& operator<<(std::ostream& stream, const Vector& v);

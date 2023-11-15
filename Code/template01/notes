@@ -1,0 +1,47 @@
+/*
+
+Code Version 1:
+
+In matrix.h Zeile 112:
+
+/// value the iterator points to
+typename iterator_traits<is_const>::entry_type value();
+
+In matrix.cpp Zeile 148:
+template<bool is_const>
+typename Matrix::iterator_traits<is_const>::entry_type Matrix::RowIteratorBase<is_const>::value()
+{
+    return (*pMat)(pRowIdx, pColIdx);
+}
+
+Läuft und gibt keine Warnung.
+
+Version 2 (hat Julian uns geschickt)
+In matrix.h Zeile 112:
+/// value the iterator points to
+typename iterator_traits<is_const>::entry_type& value();
+
+In matrix.cpp Zeile 148:
+template<bool is_const>
+typename Matrix::iterator_traits<is_const>::entry_type& Matrix::RowIteratorBase<is_const>::value()
+{
+    return (*pMat)(pRowIdx, pColIdx);
+}
+
+Es wurden 2 "&" Zeichen hinzugefügt.
+Gibt eine Warnung aus...
+
+##########################################################################################################################################
+##########################################################################################################################################
+##########################################################################################################################################
+
+SparseMatrix Zeile 97
+
+Könnte man aus pCurVal und pCurInd nicht eine Variable machen?
+
+SparseMatrix Zeile 192
+	Ist hier durch den "const" gesichert, dass der Inhalt nicht bearbeitet werden kann?
+	Ansonsten wird ja direkt der Zugriff auf "m_values[r * m_row_capacity +i]" ermöglicht.
+
+
+*/

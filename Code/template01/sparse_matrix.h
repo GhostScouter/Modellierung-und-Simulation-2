@@ -14,7 +14,7 @@
 #include <cassert>
 #include <set>
 #include <map>
-#include "vector.h"
+
 
 using namespace std;
 
@@ -26,12 +26,12 @@ class SparseMatrix
 {
 	public:
 
-		size_t capacity;
-		size_t rows;
-		size_t columns;
-		size_t vectorSize;
-		size_t* colInds;
-		double* values;
+		size_t m_rows;
+		size_t m_cols;
+		size_t m_row_capacity;
+		std::vector<double> m_values;
+		std::vector<size_t> m_col_inds;
+		size_t m_zero = 0;
 		
 
 	public:
@@ -105,9 +105,8 @@ class SparseMatrix
 				size_t fakeColumnPosition;
 
 			public:
-				size_t vectorPosition;
-				size_t fakeColumnPosition;
-			    typename std::conditional<is_const, const SparseMatrix*, SparseMatrix*>::type underlyingMatrix;
+
+			    typename std::conditional<is_const, const SparseMatrix*, SparseMatrix*>::type pMat;
 
 			public:
 				/// Constructor with row; set to first col
@@ -192,6 +191,8 @@ class SparseMatrix
 		 * The result is returned in a new instance.
 		 */
 		Vector operator*(Vector v) const;
+
+		void clear();
 };
 
 

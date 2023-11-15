@@ -7,266 +7,238 @@
 
 #include "matrix.h"
 #include "vector.h"
-#include "vector.cpp"
+#include <cassert>
+#include <iostream>
+#include <iomanip>
 
 Matrix::Matrix()
-{
-	rows = 0;
-	columns = 0;
-
-	matrix = new double* [rows];
-	for(int i=0; i < rows; ++i)
-		matrix[i] = new double [columns];
-}
+{}
 
 
 Matrix::Matrix(std::size_t r, std::size_t c, double val)
 {
-	rows = r;
-	columns = c;
+	m_rows = r;
+    m_cols = c;
+    m_mat = Vector(r*c, val);
 
-	matrix = new double* [rows];
-	for(int i=0; i < rows; ++i)
-		matrix[i] = new double [columns];
-
-	for(int j=0; j < rows; ++j)
-		for(int k=0; k < columns; ++k)
-			matrix[j][k] = val;
+    //std::cout << m_mat << std::endl;
 }
 
+Matrix::Matrix(const Matrix& M){               // mache aus const eine nicht const
 
-Matrix::~Matrix(){
+    m_mat.resize(M.num_cols() * M.num_rows());
+    m_rows = M.num_rows();
+    m_cols = M.num_cols();
 
-    for (std::size_t i = 0; i < rows; ++i) {
-        delete[] matrix[i];
+    for(size_t i = 0; i < M.num_rows(); ++i){
+        for(size_t j = 0; j < M.num_cols(); ++j){
+            this->operator()(i,j) = M(i,j);
+        }
     }
-    delete[] matrix;
 
 }
-Matrix& Matrix::printMatrix(){
-	std::cout << matrix << std::endl;
-	int counter = 0;
-	for(int i=0; i < rows; ++i){
-		counter = 0;
-		std::cout << "|";
-		for(int j=0; j < columns; ++j){
-			if (counter < (columns-1)){
-				std::cout << matrix[i][j];
-				counter +=1;
-			}
-			else{
-				std::cout << matrix[i][j] << "|" << std::endl;
-				counter +=1;
-			}
-		}
-	}
 
-}
+Matrix::~Matrix()
+{}
 
 
 std::size_t Matrix::num_rows() const
 {
-	return rows;
+	return m_rows;
 }
 
 
 std::size_t Matrix::num_cols() const
 {
-	
-	return columns;
+	return m_cols;
 }
+
 
 
 void Matrix::resize(std::size_t r, std::size_t c, double val)
 {
-	// Allocate a new matrix with the new size
-    double** newMatrix = new double*[r];
-    for (std::size_t i = 0; i < r; ++i) {
-        newMatrix[i] = new double[c];
-        // Initialize with the value provided or the default value
-        for (std::size_t j = 0; j < c; ++j) {
-            newMatrix[i][j] = val;
+    Matrix Inter = Matrix(*this);       // Speichere "original" Matrix zwischen, operiere dann auf "original" Matrix
+    //std::cout << Inter << std::endl;
+    m_mat = Vector(r*c, val);
+    m_rows = r;
+    m_cols = c;
+
+    for(size_t i = 0; i < r; ++i){
+        for(size_t j = 0; j < c; ++j){
+            if(i < Inter.num_rows() && j < Inter.num_cols()) {
+                this->operator()(i, j) = Inter(i, j);               // Da wir auf der "original" Matrix arbeiten, muss nichts returned werden
+            }
         }
     }
+    //std::cout << *this << std::endl;
+}
 
-    // Copy the data from the old matrix to the new matrix
-    // Only copy the data if it is within the bounds of both the old and new matrix
-    for (std::size_t i = 0; i < r && i < rows; ++i) {
-        for (std::size_t j = 0; j < c && j < columns; ++j) {
-            newMatrix[i][j] = matrix[i][j];
-        }
+
+
+template<bool is_const>
+Matrix::RowIteratorBase<is_const>::
+RowIteratorBase(typename Matrix::iterator_traits<is_const>::matrix_type& mat, std::size_t rowIndex) : pMat(&mat)
+{
+	if(mat.num_rows() <= rowIndex) {
+        throw std::runtime_error("ugh.. RowIteratorBase was instantiated with rowIndex > mat.num_rows()-1...");
     }
-
-    // Deallocate the old matrix
-    for (std::size_t i = 0; i < rows; ++i) {
-        delete[] matrix[i];
-    }
-    delete[] matrix;
-
-    // Set the matrix to the new matrix
-    matrix = newMatrix;
-    rows = r;
-	columns = c;
+    pMat = &mat;
+    pRowIdx = rowIndex;         
+    pColIdx = 0;
 }
 
 
 template<bool is_const>
-Matrix::RowIteratorBase<is_const>::RowIteratorBase(typename Matrix::iterator_traits<is_const>::matrix_type& mat, std::size_t rowIndex)
+Matrix::RowIteratorBase<is_const>::
+RowIteratorBase
+(
+	typename Matrix::iterator_traits<is_const>::matrix_type& mat,
+	std::size_t rowIndex,
+	std::size_t startFromCol
+)
 {
-	content = 0;
-	rowPosition = rowIndex;
-	colPosition = 0;
-}
-
-
-template<bool is_const>
-Matrix::RowIteratorBase<is_const>::RowIteratorBase(typename Matrix::iterator_traits<is_const>::matrix_type& mat,std::size_t rowIndex,std::size_t startFromCol)
-: underlyingMatrix(&mat)
-{
-	content = 0;
-	rowPosition = rowIndex;
-	colPosition = startFromCol;
+    //std::cout << "initializing iterator with matrix: " << std::endl;
+    //std::cout << mat << std::endl;
+    if(mat.num_rows() <= rowIndex) {
+        throw std::runtime_error("ugh.. RowIteratorBase was instantiated with rowIndex > mat.num_rows()-1...");
+    }
+    if (mat.num_cols() < startFromCol) {
+        throw std::runtime_error("nah... xD RowiteratorBase was instantiated with startFromCol higher than or equal to mat.num_cols().");
+    }
+    pMat = &mat;
+    pRowIdx = rowIndex;
+    pColIdx = startFromCol;
 }
 
 
 template<bool is_const>
 bool Matrix::RowIteratorBase<is_const>::operator!=(RowIteratorBase& other) const
 {
-	bool result = false;
-
-	if (rowPosition != other.rowPosition or colPosition != other.colPosition){
-		result = true;
-	}
-	return result;
+	if (pMat != other.pMat){        // andere Matrix => Ja, sind ungleich
+        return true;
+    }
+    return (pRowIdx != other.pRowIdx || pColIdx != other.pColIdx );     // ansonsten return true falls Rows oder Cols ungleich sind
 }
 
 
 template<bool is_const>
 bool Matrix::RowIteratorBase<is_const>::operator==(RowIteratorBase& other) const
 {
-	// todo: implement
-	bool result = false;
-
-	if (rowPosition == other.rowPosition and colPosition == other.colPosition){
-		result = true;
-	}
-	return result;
+    if (pMat != other.pMat){
+        return false;
+    }
+    return (pRowIdx == other.pRowIdx && pColIdx == other.pColIdx);
 }
 
 
 template<bool is_const>
 Matrix::RowIteratorBase<is_const>& Matrix::RowIteratorBase<is_const>::operator++()
 {
-
-
-	colPosition += 1;
-	content = underlyingMatrix -> matrix[rowPosition][colPosition];
+	++pColIdx;
+    return *this;
 }
 
 template<bool is_const>
 typename Matrix::iterator_traits<is_const>::entry_type Matrix::RowIteratorBase<is_const>::value() const
 {
-	std::cout << "Hallo, bin konstant. Hier ist der Wert an der Stelle des Iterators: " << content;
+	return (*pMat)(pRowIdx, pColIdx);
+
 }
 
 template<bool is_const>
-typename Matrix::iterator_traits<is_const>::entry_type& Matrix::RowIteratorBase<is_const>::value()
+typename Matrix::iterator_traits<is_const>::entry_type Matrix::RowIteratorBase<is_const>::value()
 {
-	return underlyingMatrix -> matrix[rowPosition][colPosition];
+    return (*pMat)(pRowIdx, pColIdx);
 }
 
 template<bool is_const>
 std::size_t Matrix::RowIteratorBase<is_const>::col_index() const
 {
-	return colPosition;
+	return pColIdx;
 }
+
 
 
 Matrix::RowIterator Matrix::begin(std::size_t r)
 {
-    // Initialize a RowIterator object with the current Matrix and the specified row
-    return Matrix::RowIterator(*this, r);
+	return RowIteratorBase<false>(*this, r);
 }
-
 
 
 Matrix::RowIterator Matrix::end(std::size_t r)
 {
-    // Initialize a RowIterator object with the current Matrix and the specified row
-    return Matrix::RowIterator(*this, r, columns);
+    return RowIteratorBase<false>(*this, r, this->num_cols());
 }
 
 
 Matrix::ConstRowIterator Matrix::begin(std::size_t r) const
 {
-    // Initialize a RowIterator object with the current Matrix and the specified row
-    return Matrix::ConstRowIterator(*this, r);
+	return RowIteratorBase<true>(*this, r);
 }
 
 
 Matrix::ConstRowIterator Matrix::end(std::size_t r) const
 {
-    // Initialize a RowIterator object with the current Matrix and the specified row
-    return Matrix::ConstRowIterator(*this, r, columns);
+	return RowIteratorBase<true>(*this, r, this->num_cols());
 }
 
 
-double Matrix::operator()(std::size_t r, std::size_t c) const
+double Matrix::operator()(std::size_t r, std::size_t c) const   // bei const darf wird eine lokale Variable zurückgegeben
 {
-	return matrix[r][c];
+	assert(r < m_rows && c < m_cols);
+    double out = m_mat[r * m_cols + c];
+    return out;
+
 }
 
 
 double& Matrix::operator()(std::size_t r, std::size_t c)
 {
-	return matrix[r][c];
+    assert(r < m_rows && c < num_cols());
+    return  m_mat[r * m_cols + c];                              // bei nicht const, geben wir die direkte Referenz aus
+
 }
 
-
+///calculates product M \cdot v = b
 Vector Matrix::operator*(Vector v) const
 {
-	double temporaryResult = 0;				// used in the core of the calculation to sum up entries of result vector
-	int size = v.vectorSize;
+	assert(v.size() == m_cols);                             // Vektorgröße muss gleich Spaltenanzahl sein
+    Vector b (m_rows, 0);                                   // Ergebnisvektor b
 
-	Vector gatherResults = Vector(size);	// build result vector to be altered and then returned
+    for(size_t i = 0; i < m_rows; ++i){                     // gehe durch rows
+        auto end = this->end(i);                            // Erstelle Iterator an Endposition zum späteren Vergleich
+        size_t j = 0;
 
-    for (int i = 0; i < rows; ++i){			// pass through the matrix' rows
-		for (int j = 0; j < size; j++){		// calculate one entry of the result vector
-
-			temporaryResult = temporaryResult + matrix[i][j] * v.vector[j];
-		}
-		gatherResults.vector[i] = temporaryResult;		// put result into result vector
-		temporaryResult = 0;							// reset the temporaryResult so the next calculation can take place
-	}
-
-	return gatherResults;
+        for(auto it = this->begin(i); it != end; ++it){     // Falls row-Iterator gleich end Iterator ist: Stopp!
+            b[i] += this->operator()(i,j) * v[j];           // Summiere Zwischenergebnis auf, solange wir in derselben Zeile sind
+            j++;
+        }
+    }
+    return b;
 }
+
+void Matrix::clear(){
+
+    m_mat = Vector(m_rows*m_cols, 0.0);                     // lasse Member Variablen in Ruhe, fülle mit Nullen
+
+}
+
+std::ostream& operator<<(std::ostream& stream, const Matrix& m)
+{
+
+    if(m.num_rows() == 0 || m.num_cols()) {return stream << "()";}
+
+    for(size_t r = 0; r < m.num_rows(); ++r){
+        for(size_t c = 0; c < m.num_cols(); ++c){
+            std::cout << std::setw(6) << std::setfill(' ') << std::setprecision(2) << std::fixed << m(r,c) << "\t";
+        }
+        std::cout << std::endl;
+    }
+    return stream;
+
+}
+
 
 // explicit template instantiations
 template class Matrix::RowIteratorBase<true>;
 template class Matrix::RowIteratorBase<false>;
-
-/*
-int main() {
-
-	Matrix testMatrix(1,1,1);
-	testMatrix.resize(2,2,2);
-	testMatrix.resize(3,3,3);
-	Vector testVektor(3,3);
-	
-	Matrix::RowIteratorBase<false> test_01(testMatrix, 1, 1);
-	double x = test_01.value();
-	std::size_t colin =  test_01.col_index();
-	std::cout << "colin: " << colin << std::endl;
-	std::cout << "x: " << x << std::endl;
-
-	testMatrix.printMatrix();
-	testVektor.printVector();
-
-	Vector result = testMatrix.operator*(testVektor);
-
-	result.printVector();
-
-	return 0;
-}
-*/

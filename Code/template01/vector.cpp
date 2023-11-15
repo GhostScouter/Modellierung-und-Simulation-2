@@ -5,123 +5,134 @@
  *      Author: 
  */
 
-#include "vector.h"
+
 #include <cassert>
 #include <cmath>
-#include <iostream>
 
-using namespace std;
 
 Vector::Vector()
-{
-    vectorSize = 0;
-    vector = new double[vectorSize];
-	vectorFilling = 0;
+{}
 
-	for (int i = 0; i < vectorSize; ++i) {
-        vector[i] = vectorFilling;
-	}		
-}
-
-Vector::Vector(std::size_t sz, double val)
-{
-    vectorSize = sz;
-    vector = new double[vectorSize];
-	vectorFilling = val;
-
-	for (int i = 0; i < vectorSize; ++i) {
-            vector[i] = vectorFilling;
-	}
-}
+Vector::Vector(std::size_t sz, double val)  // construct a vector
+: std::vector<double>(sz, val)              // use the standard vector
+{}
 
 Vector::~Vector()
+{}
+
+
+
+Vector& Vector::operator=(double d)         // set new values
 {
-    delete[] vector;
+	for(auto it = this->begin(); it != this->end(); ++it){      // iterator "it" geht von Anfang bis ende den Vektor durch
+        *it = d;                                                // *iterator ist der Wert an der Stelle
     }
-
-
-Vector& Vector::printVector() {
-	std::cout << vector << std::endl;
-	for (int i = 0; i < vectorSize; ++i) {
-		std::cout << vector[i] << ' ';
-	}
-	std::cout << std::endl;
+    return *this;
 }
 
-Vector& Vector::operator=(double d)
-{
-        for (int i = 0; i < vectorSize; ++i) {
-            vector[i] = d;
-        }
-}
 
-Vector& Vector::operator+=(const Vector& v)
+Vector& Vector::operator+=(const Vector& v) // addiere Vektoren
 {
-        for (int i = 0; i < vectorSize; ++i) {
-            vector[i] = vector[i] + v.vectorFilling;
-        }
-        return *this; // Return a reference to the current instance
+
+    const std::size_t sz = this->size();    // sz ist Größe unserers Vektors
+    assert(v.size() == sz);                 // prüfe auf identische Größe
+
+    for(size_t i = 0; i < sz; ++i){         // iteriere über vektor
+        this->operator[](i) += v[i];        // Wert von Vektor an Stelle i + Wert des anderen an Stelle i
     }
-
+    return *this;
+}
 
 Vector& Vector::operator-=(const Vector& v)
 {
-		for (int i = 0; i < vectorSize; ++i) {
-            vector[i] = vector[i] - v.vectorFilling;
-        }
-        return *this; // Return a reference to the current instance
+    assert(v.size() == this->size());
+    const std::size_t sz = this->size();
+
+    for(size_t i = 0; i < sz; ++i){
+        this->operator[](i) -= v[i];
     }
+    return *this;
+}
 
 
-Vector& Vector::operator*=(double d)
+Vector& Vector::operator*=(double d)        // Streckung eines Vektor
 {
-        for (int i = 0; i < vectorSize; ++i) {
-            vector[i] = d * vector[i];
-        }
-        return *this; // Return a reference to the current instance
+    for(auto it = this->begin(); it != this->end(); ++it){
+        *it *= d;
     }
+    return *this;
+}
 
 
-Vector Vector::operator+(const Vector& v) const
+Vector Vector::operator+(const Vector& v) const         // Addition zweier Vektoren. Return new Instance
 {
-    double newFilling = vectorFilling + v.vectorFilling;
-	cout << newFilling << endl;
-    return Vector (vectorSize, newFilling); // Return a new instance of vector
+    const std::size_t sz = this->size();
+    assert(v.size() == sz);
+
+    Vector vOut = Vector(sz, 0.0);                      // Erstelle Ergebnisvektor
+
+    for(size_t i = 0; i < sz; ++i){
+        vOut[i] = this->operator[](i) + v[i];           // Fülle Ergebnisvektor
+    }
+    return vOut;                                        // return new instance
 }
 
 
 Vector Vector::operator-(const Vector& v) const
 {
-    double newFilling = vectorFilling - v.vectorFilling;
-	cout << newFilling << endl;
-    return Vector (vectorSize, newFilling); // Return a new instance of vector
+    const std::size_t sz = this->size();
+    assert(v.size() == sz);
+
+    Vector vOut = Vector(sz, 0.0);
+
+    for(size_t i = 0; i < sz; ++i){
+        vOut[i] = this->operator[](i) - v[i];
+    }
+    return vOut;
 }
 
 
 Vector Vector::operator*(double d) const
 {
-    double newFilling = vectorFilling * d;
-	cout << newFilling << endl;
-    return Vector (vectorSize, newFilling); // Return a new instance of vector
+    const std::size_t sz = this->size();
+    Vector vOut = Vector(sz, 0.0);
+
+    for(size_t i = 0; i < sz; ++i){
+        vOut[i] = this->operator[](i) * d;
+    }
+    return vOut;
 }
 
 
-double Vector::operator*(const Vector& v) const
+double Vector::operator*(const Vector& v) const         // Skalarproduct zweier Vektoren
 {
-        double scalarProduct = 0;
-		for (int i = 0; i < vectorSize; ++i) {
-            scalarProduct = scalarProduct + vectorFilling * v.vectorFilling;
-        }
-        return scalarProduct; // Return a reference to the current instance
+    const std::size_t sz = this->size();
+    assert(v.size() == sz);
+
+    double result = 0;
+
+    for(size_t i = 0; i < sz; ++i){
+        result += this->operator[](i) * v[i];
     }
-    
+    return result;
+}
+
 
 double Vector::norm()
 {
-        double norm = sqrt(vectorSize * vectorFilling * vectorFilling); 
-        return norm; // Return a reference to the current instance
-    }
+	return sqrt(operator*(*this));      // sqrt des Skalarprodukts ist Norm!
+}
 
-std::size_t Vector::size() const {
-    return vectorSize;
+
+std::ostream& operator<<(std::ostream& stream, const Vector& v)
+{
+	if (v.empty()) return stream << "()";
+
+	std::size_t sz = v.size() - 1;
+	stream << "(";
+	for (std::size_t i = 0; i < sz; ++i)
+		stream << v[i] << " ";
+	stream << v[sz] << ")";
+
+	return stream;
 }
