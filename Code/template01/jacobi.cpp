@@ -20,14 +20,18 @@ Jacobi<TMatrix>::Jacobi()
 template <typename TMatrix>
 bool Jacobi<TMatrix>::init(const vector_type& x)
 {
-	// TODO: implement
+	return true;
 }
 
 
 template <typename TMatrix>
 bool Jacobi<TMatrix>::apply(vector_type& c, const vector_type& d) const
 {
-	// TODO: implement
+	
+	for(size_t i = 0;i < d.size(); i++){
+		c[i] =  m_damp * d[i] / m_A(i,i);
+	}
+	return true;
 }
 
 
