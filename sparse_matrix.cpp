@@ -7,7 +7,8 @@
 
 #include <iostream>
 #include <iomanip>
-
+#include <sparse_matrix.h>
+#include <vector.h>
 
 SparseMatrix::SparseMatrix()
 {

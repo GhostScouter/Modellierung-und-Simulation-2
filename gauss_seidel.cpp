@@ -35,7 +35,7 @@ bool GaussSeidel<TMatrix>::init(const vector_type& x)
 
 	double factor = 0;									// will scale each row down, so that it starts with the number 1
 
-    for (int i = 0; i < (m_A->m_cols; ++i) {			// iterate over Matrix rows
+    for (int i = 0; i < (m_A->m_cols); ++i) {			// iterate over Matrix rows
         factor = A[i*A.m_cols];							// find downscaling factor (ie. matrix diagonal entry)
 
 		calculation_slave[i*A.m_cols] = 1;				// build calculation_slave with diagonal of 1
