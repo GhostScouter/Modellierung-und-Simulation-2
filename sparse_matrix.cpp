@@ -5,11 +5,9 @@
  *      Author: 
  */
 
+#include "sparse_matrix.h"
 #include <iostream>
 #include <iomanip>
-#include "vector.h"
-#include "matrix.h"
-#include "sparse_matrix.h"
 
 
 SparseMatrix::SparseMatrix()
@@ -50,10 +48,10 @@ std::size_t SparseMatrix::num_cols() const
 
 void SparseMatrix::resize(std::size_t r, std::size_t c, double defVal)
 {
-	m_values.resize(m_row_capacity * r, defVal);            // passe rows erstmal an
-    m_col_inds.resize(m_row_capacity * r, (size_t) - 1);    // passe rows erstmal an
+	m_values.resize(m_row_capacity * r, defVal);
+    m_col_inds.resize(m_row_capacity * r, (size_t) - 1);
 
-    m_rows = r;                                             // falls columns größer geworden sind, passiert (fast) nichts
+    m_rows = r;
     if(c >= m_cols){
         m_cols = c;
         return;
@@ -61,10 +59,10 @@ void SparseMatrix::resize(std::size_t r, std::size_t c, double defVal)
 
     m_cols = c;
     for(size_t i = 0; i < m_row_capacity * r; ++i){
-        if(m_col_inds[i] < m_cols){                         // lasse klein genuge Einträge in Ruhe
+        if(m_col_inds[i] < m_cols){
             continue;
         }
-        m_col_inds[i] = (size_t) -1;                        // lösche die alten Werte falls zu groß
+        m_col_inds[i] = (size_t) -1;
     }
 }
 
@@ -94,8 +92,8 @@ SparseMatrix::RowIteratorBase<is_const>::RowIteratorBase
 	std::size_t startFromCol
 )
 {
-    pCurInd = &mat.m_col_inds[rowIndex * mat.m_row_capacity];       // funktioniert auch mit "+ startFromCol" ?
-    pCurVal = &mat.m_values[rowIndex * mat.m_row_capacity];         // damit müsste die for-Loop gespart werden?
+    pCurInd = &mat.m_col_inds[rowIndex * mat.m_row_capacity];
+    pCurVal = &mat.m_values[rowIndex * mat.m_row_capacity];
 	for(size_t i = 0; i < mat.m_row_capacity; ++i){
         if(*pCurInd == startFromCol){
             break;
@@ -177,7 +175,7 @@ bool SparseMatrix::has_entry(std::size_t r, std::size_t c) const
     if(r >= m_rows || c >= m_cols){
         throw std::runtime_error("matrix request out of bounds...");
     }
-    for(size_t i = 0; i < m_row_capacity; ++i){         // suche im sinnvollen Bereich
+    for(size_t i = 0; i < m_row_capacity; ++i){
         if(m_col_inds[r * m_row_capacity + i] == c){
             return true;
         }
@@ -203,15 +201,15 @@ double& SparseMatrix::operator()(std::size_t r, std::size_t c)
     size_t nr_row_elements = 0;
     for(size_t i = 0; i < m_row_capacity; ++i){
         if(m_col_inds[r * m_row_capacity + i] < (size_t) -1){
-            ++nr_row_elements;                                  // Zähle die gefundenen Elemente, die nicht -1 sind.
+            ++nr_row_elements;
         }
-        if(m_col_inds[r * m_row_capacity + i] == c){            // In ColInds stehen ja Column-Nummern. Daher teste, ob c gefunden wird
+        if(m_col_inds[r * m_row_capacity + i] == c){
             return m_values[r * m_row_capacity +i];
         }
     }
     //did not find entry. check whether it can be created:
     if(nr_row_elements == m_row_capacity){
-        throw std::runtime_error("matrix entry not found. creation of new entry forbidden by row capacity...");
+        throw std::runtime_error("matrix entry not found. creation of new entry frobidden by row capacity...");
     }
     //since col indices are sorted, last entry has to be free
     size_t end_of_r = (r + 1) * m_row_capacity - 1;
@@ -267,3 +265,4 @@ std::ostream& operator<<(std::ostream& stream, const SparseMatrix& m)
 // explicit template instantiations
 template class SparseMatrix::RowIteratorBase<true>;
 template class SparseMatrix::RowIteratorBase<false>;
+

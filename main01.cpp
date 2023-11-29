@@ -114,7 +114,7 @@ int main(int argc, char** argv)
     //LU_test(5);
 
     //example for solving of poisson problem
-    size_t nElemsPerDim = 20;
+    size_t nElemsPerDim = 8;
     SparseMatrix A;
 
     Vector b, u;
@@ -122,9 +122,9 @@ int main(int argc, char** argv)
     create2dPoissonSystemWithSize(A, b, nElemsPerDim);
 
     std::cout << "RHS vector looks like this:" << std::endl;
-    printVectorOnGrid(b, nElemsPerDim);
+   // printVectorOnGrid(b, nElemsPerDim);
     std::cout << "\nassembled Matrix A looks like this:" << std::endl;
-    std::cout << A << std::endl;
+   // std::cout << A << std::endl;
     u.resize(b.size());
 
     //create random starting values
@@ -150,7 +150,7 @@ int main(int argc, char** argv)
     iterative_solver.set_corrector(&jac);
     iterative_solver.init(u);
     //start iteration scheme
-    //bool success = iterative_solver.solve(u, b);
+    bool success = iterative_solver.solve(u, b);
 
     std::cout << "Jacobi finished with soultion: " << std::endl;
     printVectorOnGrid(u, nElemsPerDim);

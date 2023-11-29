@@ -14,7 +14,7 @@
 #include <cassert>
 #include <set>
 #include <map>
-
+#include "vector.h"
 
 
 class SparseMatrixIteratorRegistry;
@@ -22,16 +22,6 @@ class SparseMatrixIteratorRegistry;
 
 class SparseMatrix
 {
-	public:
-
-		size_t m_rows;
-		size_t m_cols;
-		size_t m_row_capacity;
-		std::vector<double> m_values;
-		std::vector<size_t> m_col_inds;
-		size_t m_zero = 0;
-		
-
 	public:
 		/**
 		 * @brief Constructor without arguments
@@ -53,18 +43,6 @@ class SparseMatrix
 
 		/// Return number of columns
 		std::size_t num_cols() const;
-
-		/// Return capacity
-		std::size_t num_capacity() const;
-
-		/// Return capacity
-		std::size_t* num_colInds() const;
-
-		/// Return capacity
-		double* num_values() const;
-
-
-		SparseMatrix& printMatrix();
 
 		/// Resize the matrix
 		/**
@@ -98,10 +76,6 @@ class SparseMatrix
 		template <bool is_const>
 		class RowIteratorBase
 		{
-			public:
-
-			    typename std::conditional<is_const, const SparseMatrix*, SparseMatrix*>::type pMat;
-
 			public:
 				/// Constructor with row; set to first col
 				RowIteratorBase(typename iterator_traits<is_const>::matrix_type& mat, std::size_t rowIndex);
@@ -138,9 +112,11 @@ class SparseMatrix
 
 				friend class SparseMatrix;
 
-			public:
+			private:
 				typename iterator_traits<is_const>::entry_type* pCurVal;
-				const std::size_t* pCurInd;
+				typename iterator_traits<is_const>::matrix_type* pMat;
+                const std::size_t* pCurInd;
+
 		};
 
 		typedef RowIteratorBase<false> RowIterator;
@@ -186,7 +162,17 @@ class SparseMatrix
 		 */
 		Vector operator*(Vector v) const;
 
-		void clear();
+        /**
+         * @brief Sets all entries of the matrix to 0.
+         */
+        void clear();
+    protected:
+        std::size_t m_rows;
+        std::size_t m_cols;
+        std::size_t m_row_capacity;
+        std::vector<double> m_values;
+        std::vector<size_t> m_col_inds;
+        double m_zero = 0.0;
 };
 
 

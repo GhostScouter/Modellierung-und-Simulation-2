@@ -12,7 +12,7 @@ Author:
 template <typename TMatrix>
 Jacobi<TMatrix>::Jacobi()
 {
-    // hier nur damp Faktor? Oder geht es sogar ohne, falls man set_damping ausführt?
+    m_damp = 0.8;
 }
 
 

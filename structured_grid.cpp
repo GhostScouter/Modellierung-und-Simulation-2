@@ -133,7 +133,7 @@ void StructuredGrid<dim>::vertex_neighbors(std::vector<std::size_t>& neighborsOu
         int error = 0;
 
         if(neighborsOut[i] < 0 || ind > num_vertices()-1){          // the index cant be lower than zero or higher than X
-            neighborsOut.erase[i];
+            neighborsOut.erase(i);
         }
 
         // This is trickier: We also must make sure only real neighbors are neighbors

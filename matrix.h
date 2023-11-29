@@ -8,17 +8,12 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include <iostream>
 #include "vector.h"
+#include <ostream>
 
 
 class Matrix
 {
-	protected:
-		size_t m_rows;
-		size_t m_cols;
-		Vector m_mat;
-
 	public:
 		/** @brief Constructor without arguments
 		 *	The matrix is to be initialized with a size of 0x0.
@@ -31,8 +26,7 @@ class Matrix
 		**/
 		Matrix(std::size_t r, std::size_t c, double val = 0.0);
 
-		Matrix(const Matrix&);
-
+        Matrix(const Matrix& M);
 		/// Destructor
 		virtual ~Matrix();
 
@@ -50,7 +44,6 @@ class Matrix
 		 */
 		void resize(std::size_t r, std::size_t c, double val = 0.0);
 
-		Matrix& printMatrix();
 
 	public:
 		/// helper struct for templated iterator type
@@ -75,12 +68,6 @@ class Matrix
 		template <bool is_const>
 		class RowIteratorBase
 		{
-			public:
-
-			    typename std::conditional<is_const, const Matrix*, Matrix*>::type pMat;
-				size_t pRowIdx;
-				size_t pColIdx;
-
 			public:
 				/// Constructor with row; set to first col
 				RowIteratorBase(typename iterator_traits<is_const>::matrix_type& mat, std::size_t rowIndex);
@@ -110,10 +97,15 @@ class Matrix
 				typename iterator_traits<is_const>::entry_type value() const;
 
 				/// value the iterator points to
-				typename iterator_traits<is_const>::entry_type value();
+				typename iterator_traits<is_const>::entry_type& value();
 
 				/// column the iterator points to
 				std::size_t col_index() const;
+            private:
+                typename iterator_traits<is_const>::matrix_type * pMat;
+                std::size_t pRowIdx;
+                std::size_t pColIdx;
+
 		};
 
 		typedef RowIteratorBase<false> RowIterator;
@@ -154,9 +146,18 @@ class Matrix
 		 */
 		Vector operator*(Vector v) const;
 
-		void clear();
-
+        /**
+         * @brief Sets all entries of the matrix to 0.
+         */
+        void clear();
+    private:
+        Vector m_mat;
+        size_t m_rows = 0;
+        size_t m_cols = 0;
 };
+
+/// write matrix to output stream
+std::ostream& operator<<(std::ostream& stream, const Matrix& m);
 
 
 #endif // MATRIX_H

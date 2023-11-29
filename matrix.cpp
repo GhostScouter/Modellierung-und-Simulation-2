@@ -5,13 +5,15 @@
  *      Author: 
  */
 
+#include "matrix.h"
 #include <cassert>
 #include <iostream>
 #include <iomanip>
-#include "matrix.h"
 
 Matrix::Matrix()
-{}
+{
+
+}
 
 
 Matrix::Matrix(std::size_t r, std::size_t c, double val)
@@ -23,12 +25,10 @@ Matrix::Matrix(std::size_t r, std::size_t c, double val)
     //std::cout << m_mat << std::endl;
 }
 
-Matrix::Matrix(const Matrix& M){               // mache aus const eine nicht const
-
+Matrix::Matrix(const Matrix& M){
     m_mat.resize(M.num_cols() * M.num_rows());
     m_rows = M.num_rows();
     m_cols = M.num_cols();
-
     for(size_t i = 0; i < M.num_rows(); ++i){
         for(size_t j = 0; j < M.num_cols(); ++j){
             this->operator()(i,j) = M(i,j);
@@ -56,16 +56,15 @@ std::size_t Matrix::num_cols() const
 
 void Matrix::resize(std::size_t r, std::size_t c, double val)
 {
-    Matrix Inter = Matrix(*this);       // Speichere "original" Matrix zwischen, operiere dann auf "original" Matrix
+    Matrix Inter = Matrix(*this);
     //std::cout << Inter << std::endl;
     m_mat = Vector(r*c, val);
     m_rows = r;
     m_cols = c;
-
     for(size_t i = 0; i < r; ++i){
         for(size_t j = 0; j < c; ++j){
             if(i < Inter.num_rows() && j < Inter.num_cols()) {
-                this->operator()(i, j) = Inter(i, j);               // Da wir auf der "original" Matrix arbeiten, muss nichts returned werden
+                this->operator()(i, j) = Inter(i, j);
             }
         }
     }
@@ -82,7 +81,7 @@ RowIteratorBase(typename Matrix::iterator_traits<is_const>::matrix_type& mat, st
         throw std::runtime_error("ugh.. RowIteratorBase was instantiated with rowIndex > mat.num_rows()-1...");
     }
     pMat = &mat;
-    pRowIdx = rowIndex;         
+    pRowIdx = rowIndex;
     pColIdx = 0;
 }
 
@@ -113,10 +112,10 @@ RowIteratorBase
 template<bool is_const>
 bool Matrix::RowIteratorBase<is_const>::operator!=(RowIteratorBase& other) const
 {
-	if (pMat != other.pMat){        // andere Matrix => Ja, sind ungleich
+	if (pMat != other.pMat){
         return true;
     }
-    return (pRowIdx != other.pRowIdx || pColIdx != other.pColIdx );     // ansonsten return true falls Rows oder Cols ungleich sind
+    return (pRowIdx != other.pRowIdx || pColIdx != other.pColIdx );
 }
 
 
@@ -145,7 +144,7 @@ typename Matrix::iterator_traits<is_const>::entry_type Matrix::RowIteratorBase<i
 }
 
 template<bool is_const>
-typename Matrix::iterator_traits<is_const>::entry_type Matrix::RowIteratorBase<is_const>::value()
+typename Matrix::iterator_traits<is_const>::entry_type& Matrix::RowIteratorBase<is_const>::value()
 {
     return (*pMat)(pRowIdx, pColIdx);
 }
@@ -182,7 +181,7 @@ Matrix::ConstRowIterator Matrix::end(std::size_t r) const
 }
 
 
-double Matrix::operator()(std::size_t r, std::size_t c) const   // bei const darf wird eine lokale Variable zurückgegeben
+double Matrix::operator()(std::size_t r, std::size_t c) const
 {
 	assert(r < m_rows && c < m_cols);
     double out = m_mat[r * m_cols + c];
@@ -194,22 +193,20 @@ double Matrix::operator()(std::size_t r, std::size_t c) const   // bei const dar
 double& Matrix::operator()(std::size_t r, std::size_t c)
 {
     assert(r < m_rows && c < num_cols());
-    return  m_mat[r * m_cols + c];                              // bei nicht const, geben wir die direkte Referenz aus
+    return  m_mat[r * m_cols + c];
 
 }
 
 ///calculates product M \cdot v = b
 Vector Matrix::operator*(Vector v) const
 {
-	assert(v.size() == m_cols);                             // Vektorgröße muss gleich Spaltenanzahl sein
-    Vector b (m_rows, 0);                                   // Ergebnisvektor b
-
-    for(size_t i = 0; i < m_rows; ++i){                     // gehe durch rows
-        auto end = this->end(i);                            // Erstelle Iterator an Endposition zum späteren Vergleich
+	assert(v.size() == m_cols);
+    Vector b (m_rows, 0);
+    for(size_t i = 0; i < m_rows; ++i){
+        auto end = this->end(i);
         size_t j = 0;
-
-        for(auto it = this->begin(i); it != end; ++it){     // Falls row-Iterator gleich end Iterator ist: Stopp!
-            b[i] += this->operator()(i,j) * v[j];           // Summiere Zwischenergebnis auf, solange wir in derselben Zeile sind
+        for(auto it = this->begin(i); it != end; ++it){
+            b[i] += this->operator()(i,j) * v[j];
             j++;
         }
     }
@@ -218,7 +215,7 @@ Vector Matrix::operator*(Vector v) const
 
 void Matrix::clear(){
 
-    m_mat = Vector(m_rows*m_cols, 0.0);                     // lasse Member Variablen in Ruhe, fülle mit Nullen
+    m_mat = Vector(m_rows*m_cols, 0.0);
 
 }
 
@@ -238,6 +235,8 @@ std::ostream& operator<<(std::ostream& stream, const Matrix& m)
 }
 
 
+
 // explicit template instantiations
 template class Matrix::RowIteratorBase<true>;
 template class Matrix::RowIteratorBase<false>;
+

@@ -11,17 +11,10 @@
 #include <vector>
 #include <ostream>
 
-class Vector: public std::vector<double>
-
+class Vector
+: public std::vector<double>
 {
-
 	public:
-    double* vector; // Member variable to hold the array
-    size_t vectorSize; // Member variable to hold the size of the array
-	double vectorFilling; // Member variable with the value that the array contains at all positions
-
-	public:
-
 		/** @brief Constructor without arguments
 		 *	The vector is to be initialized with a size of 0.
 		**/
@@ -36,21 +29,18 @@ class Vector: public std::vector<double>
 		/// @brief Destructor
 		virtual ~Vector();
 
+
 		/// Set a constant value to each component of the vector
 		Vector& operator=(double d);
-
-		Vector& printVector();
 
 		/// Add a vector to this vector and return a self-reference
 		Vector& operator+=(const Vector& v);
 
-		///  Subtract a vector from this vector and return a self-reference
+		/// Subtract a vector from this vector and return a self-reference
 		Vector& operator-=(const Vector& v);
 
-		///  Multiply this vector by a scalar and return a self-reference
+		/// Multiply this vector by a scalar and return a self-reference
 		Vector& operator*=(double d);
-
-
 
 		/// Add this vector and another vector and return in new instance
 		Vector operator+(const Vector& v) const;
@@ -67,10 +57,10 @@ class Vector: public std::vector<double>
 		/// Euclidean norm
 		double norm();
 
-    	// Declare the size() member function
-    	std::size_t size() const;
+
+
 };
 
-//std::ostream& operator<<(std::ostream& stream, const Vector& v);
+std::ostream& operator<<(std::ostream& stream, const Vector& v);
 
 #endif // VECTOR_H

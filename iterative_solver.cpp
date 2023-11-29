@@ -115,7 +115,7 @@ bool IterativeSolver<TMatrix>::solve(vector_type& x, const vector_type& b) const
 
         //alle k schritte sollte nun der aktuelle defekt mit aktueller iterationszahl etc
         //ausgegeben werden
-        if(counter % 100 == 0){
+        if(counter % 5 == 0){
             
             std::cout << "Aktuelle Iteration: " << counter << " ----- Aktueller Defekt: " << def << std::endl;
 
