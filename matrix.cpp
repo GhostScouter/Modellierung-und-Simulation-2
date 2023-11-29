@@ -9,7 +9,6 @@
 #include <iostream>
 #include <iomanip>
 #include "matrix.h"
-#include "vector.h"
 
 Matrix::Matrix()
 {}

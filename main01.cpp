@@ -148,7 +148,7 @@ int main(int argc, char** argv)
     iterative_solver.set_corrector(&jac);
     iterative_solver.init(u);
     //start iteration scheme
-    bool success = iterative_solver.solve(u, b);
+    //bool success = iterative_solver.solve(u, b);
 
     std::cout << "Jacobi finished with soultion: " << std::endl;
     printVectorOnGrid(u, nElemsPerDim);

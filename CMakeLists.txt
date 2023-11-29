@@ -47,6 +47,7 @@ set(SOURCES
 		gauss_seidel.cpp
 		util.cpp
 		vtk_exporter.cpp
+        main01.cpp
 )
 
 add_library(modsim2 ${SOURCES} ${linkLibraries})

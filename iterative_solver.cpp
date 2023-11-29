@@ -6,20 +6,17 @@
  */
 
 #include "iterative_solver.h"
-#include "matrix.h"
-#include "sparse_matrix.h"
-
 
 template <typename TMatrix>
 IterativeSolver<TMatrix>::IterativeSolver(const matrix_type& mat)
 {
-	matrix_type* m_pA = mat;
+	//matrix_type* m_pA = mat;
+    m_pA = &mat;
     m_corrector = nullptr;
     m_nit = 1;
     m_minDef = 1e-50;
     m_minRed = 1e-50;
     m_bVerbose = false;
-    m_pA = &mat;
     m_bInited = false;
 }
 
@@ -55,7 +52,7 @@ bool IterativeSolver<TMatrix>::init(const vector_type& x)
 template <typename TMatrix>
 void IterativeSolver<TMatrix>::set_matrix(const matrix_type* A)
 {
-	m_pA->A;
+	m_pA = A;
     if(m_corrector){m_corrector->set_matrix(A);}
 }
 

@@ -9,6 +9,7 @@
 #define MATRIX_H
 
 #include <iostream>
+#include "vector.h"
 
 
 class Matrix

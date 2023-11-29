@@ -1,4 +1,4 @@
-D:/SAMUEL/syncro_nextcloud/uni/Semester 11 Master/Modellierung und Simulation II/Modellierung-und-Simulation-2/cmake-build-debug/CMakeFiles/modsim2.dir
-D:/SAMUEL/syncro_nextcloud/uni/Semester 11 Master/Modellierung und Simulation II/Modellierung-und-Simulation-2/cmake-build-debug/CMakeFiles/executable03.dir
-D:/SAMUEL/syncro_nextcloud/uni/Semester 11 Master/Modellierung und Simulation II/Modellierung-und-Simulation-2/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/SAMUEL/syncro_nextcloud/uni/Semester 11 Master/Modellierung und Simulation II/Modellierung-und-Simulation-2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/cmake-build-debug/CMakeFiles/modsim2.dir
+C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/cmake-build-debug/CMakeFiles/executable03.dir
+C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/cmake-build-debug/CMakeFiles/rebuild_cache.dir

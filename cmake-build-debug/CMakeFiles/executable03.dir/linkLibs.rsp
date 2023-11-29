@@ -1,0 +1,1 @@
+ "C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/lib/libmodsim2.a" -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
