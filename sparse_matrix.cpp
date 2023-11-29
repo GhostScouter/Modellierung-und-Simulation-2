@@ -94,7 +94,7 @@ SparseMatrix::RowIteratorBase<is_const>::RowIteratorBase
 	std::size_t startFromCol
 )
 {
-    pCurInd = &mat.m_col_inds[rowIndex * mat.m_row_capacity];       // funtkioniert auch mit " + startFromCol" ?
+    pCurInd = &mat.m_col_inds[rowIndex * mat.m_row_capacity];       // funktioniert auch mit "+ startFromCol" ?
     pCurVal = &mat.m_values[rowIndex * mat.m_row_capacity];         // damit müsste die for-Loop gespart werden?
 	for(size_t i = 0; i < mat.m_row_capacity; ++i){
         if(*pCurInd == startFromCol){
@@ -211,7 +211,7 @@ double& SparseMatrix::operator()(std::size_t r, std::size_t c)
     }
     //did not find entry. check whether it can be created:
     if(nr_row_elements == m_row_capacity){
-        throw std::runtime_error("matrix entry not found. creation of new entry frobidden by row capacity...");
+        throw std::runtime_error("matrix entry not found. creation of new entry forbidden by row capacity...");
     }
     //since col indices are sorted, last entry has to be free
     size_t end_of_r = (r + 1) * m_row_capacity - 1;
