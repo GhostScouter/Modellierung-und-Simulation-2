@@ -141,30 +141,6 @@ executable03/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\executable03.dir\build.make CMakeFiles/executable03.dir/build
 .PHONY : executable03/fast
 
-gauss_seidel.obj: gauss_seidel.cpp.obj
-.PHONY : gauss_seidel.obj
-
-# target to build an object file
-gauss_seidel.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/gauss_seidel.cpp.obj
-.PHONY : gauss_seidel.cpp.obj
-
-gauss_seidel.i: gauss_seidel.cpp.i
-.PHONY : gauss_seidel.i
-
-# target to preprocess a source file
-gauss_seidel.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/gauss_seidel.cpp.i
-.PHONY : gauss_seidel.cpp.i
-
-gauss_seidel.s: gauss_seidel.cpp.s
-.PHONY : gauss_seidel.s
-
-# target to generate assembly for a file
-gauss_seidel.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/gauss_seidel.cpp.s
-.PHONY : gauss_seidel.cpp.s
-
 iterative_solver.obj: iterative_solver.cpp.obj
 .PHONY : iterative_solver.obj
 
@@ -243,6 +219,7 @@ main01.obj: main01.cpp.obj
 # target to build an object file
 main01.cpp.obj:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/main01.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\executable03.dir\build.make CMakeFiles/executable03.dir/main01.cpp.obj
 .PHONY : main01.cpp.obj
 
 main01.i: main01.cpp.i
@@ -251,6 +228,7 @@ main01.i: main01.cpp.i
 # target to preprocess a source file
 main01.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/main01.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\executable03.dir\build.make CMakeFiles/executable03.dir/main01.cpp.i
 .PHONY : main01.cpp.i
 
 main01.s: main01.cpp.s
@@ -259,31 +237,8 @@ main01.s: main01.cpp.s
 # target to generate assembly for a file
 main01.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/main01.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\executable03.dir\build.make CMakeFiles/executable03.dir/main01.cpp.s
 .PHONY : main01.cpp.s
-
-main03.obj: main03.cpp.obj
-.PHONY : main03.obj
-
-# target to build an object file
-main03.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\executable03.dir\build.make CMakeFiles/executable03.dir/main03.cpp.obj
-.PHONY : main03.cpp.obj
-
-main03.i: main03.cpp.i
-.PHONY : main03.i
-
-# target to preprocess a source file
-main03.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\executable03.dir\build.make CMakeFiles/executable03.dir/main03.cpp.i
-.PHONY : main03.cpp.i
-
-main03.s: main03.cpp.s
-.PHONY : main03.s
-
-# target to generate assembly for a file
-main03.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\executable03.dir\build.make CMakeFiles/executable03.dir/main03.cpp.s
-.PHONY : main03.cpp.s
 
 matrix.obj: matrix.cpp.obj
 .PHONY : matrix.obj
@@ -356,30 +311,6 @@ sparse_matrix.s: sparse_matrix.cpp.s
 sparse_matrix.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/sparse_matrix.cpp.s
 .PHONY : sparse_matrix.cpp.s
-
-structured_grid.obj: structured_grid.cpp.obj
-.PHONY : structured_grid.obj
-
-# target to build an object file
-structured_grid.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/structured_grid.cpp.obj
-.PHONY : structured_grid.cpp.obj
-
-structured_grid.i: structured_grid.cpp.i
-.PHONY : structured_grid.i
-
-# target to preprocess a source file
-structured_grid.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/structured_grid.cpp.i
-.PHONY : structured_grid.cpp.i
-
-structured_grid.s: structured_grid.cpp.s
-.PHONY : structured_grid.s
-
-# target to generate assembly for a file
-structured_grid.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/structured_grid.cpp.s
-.PHONY : structured_grid.cpp.s
 
 util.obj: util.cpp.obj
 .PHONY : util.obj
@@ -463,9 +394,6 @@ help:
 	@echo ... rebuild_cache
 	@echo ... executable03
 	@echo ... modsim2
-	@echo ... gauss_seidel.obj
-	@echo ... gauss_seidel.i
-	@echo ... gauss_seidel.s
 	@echo ... iterative_solver.obj
 	@echo ... iterative_solver.i
 	@echo ... iterative_solver.s
@@ -478,9 +406,6 @@ help:
 	@echo ... main01.obj
 	@echo ... main01.i
 	@echo ... main01.s
-	@echo ... main03.obj
-	@echo ... main03.i
-	@echo ... main03.s
 	@echo ... matrix.obj
 	@echo ... matrix.i
 	@echo ... matrix.s
@@ -490,9 +415,6 @@ help:
 	@echo ... sparse_matrix.obj
 	@echo ... sparse_matrix.i
 	@echo ... sparse_matrix.s
-	@echo ... structured_grid.obj
-	@echo ... structured_grid.i
-	@echo ... structured_grid.s
 	@echo ... util.obj
 	@echo ... util.i
 	@echo ... util.s

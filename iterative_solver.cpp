@@ -10,7 +10,7 @@
 template <typename TMatrix>
 IterativeSolver<TMatrix>::IterativeSolver(const matrix_type& mat)
 {
-	//matrix_type* m_pA = mat;
+
     m_pA = &mat;
     m_corrector = nullptr;
     m_nit = 1;
@@ -45,7 +45,8 @@ void IterativeSolver<TMatrix>::set_corrector(corrector_type* stepMethod)
 template <typename TMatrix>
 bool IterativeSolver<TMatrix>::init(const vector_type& x)
 {
-	if(m_corrector){m_corrector->init(x);}
+	if(m_corrector){return this->m_corrector->init(x);}
+    return true;
 }
 
 
@@ -76,7 +77,7 @@ bool IterativeSolver<TMatrix>::solve(vector_type& x, const vector_type& b) const
 
 	//defekt d berechnen (Vektor)
     Vector defect_vector = Vector(x.size());            // speichert d ab
-    defect_vector = m_pA.operator*(x);                  // M*x
+    defect_vector = m_pA->operator*(x);                  // M*x
     defect_vector.operator-=(b);                        // - b
     // d = Ax - b abgeschlossen
 
@@ -101,7 +102,7 @@ bool IterativeSolver<TMatrix>::solve(vector_type& x, const vector_type& b) const
         counter += 1;
 
         //korrektor ausführen (jacobi, gauss seidel etc.)
-        correction_vector->apply(correction_vector, defect_vector);
+        m_corrector->apply(correction_vector, defect_vector);
         // FRAGE: Funktioniert so die Übergabe korrekt? correction_vector soll mit Inhalten c[i] gefüllt werden!
 
         //Korrekturschritt für unseren lösungsvektor x
@@ -109,7 +110,7 @@ bool IterativeSolver<TMatrix>::solve(vector_type& x, const vector_type& b) const
 
         //defekt updaten
         def_last = def;                         // speichere Fehler von letzter Iteration als def_last ab 
-        defect_vector -= m_pA.operator*(c);     // neuer def_vektor STOPP C EXISTIERT NICHT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        defect_vector -= m_pA->operator*(correction_vector);
         def = defect_vector.norm();             // norm davon ist Fehlergröße
 
         //alle k schritte sollte nun der aktuelle defekt mit aktueller iterationszahl etc

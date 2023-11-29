@@ -10,6 +10,8 @@
 
 #include "vector.h"
 #include "matrix.h"
+#include "sparse_matrix.h"
+#include <iostream>
 
 /** @brief Interface class for linear solver
  * Each class (LU, CG, LinearIteration, ...) implementing this interface has to

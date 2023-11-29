@@ -21,7 +21,7 @@ template <typename TMatrix>
 bool GaussSeidel<TMatrix>::init(const vector_type& x)
 {
 	// hier invertieren?
-	Matrix A = *m_pA;												// copies the const Matrix A
+	Matrix A = *(this->m_A);												// copies the const Matrix A
 	Matrix Inverse = Matrix(A.m_rows, A.m_cols, 0.0);				// will save M^-1
 	Matrix calculation_slave = Matrix(A.m_rows, A.m_cols, 0.0);		// will be used when necessary
 

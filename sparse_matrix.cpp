@@ -16,7 +16,7 @@ SparseMatrix::SparseMatrix()
 {
 	m_rows = 0;
     m_cols = 0;
-    m_row_capacity = 5;
+    m_row_capacity = 9;
     m_values = std::vector<double>(0, m_zero);
     m_col_inds = std::vector<size_t>(m_row_capacity * m_rows, (size_t) - 1);
 }

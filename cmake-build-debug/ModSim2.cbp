@@ -130,12 +130,6 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/gauss_seidel.cpp">
-			<Option target="modsim2"/>
-		</Unit>
-		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/gauss_seidel.h">
-			<Option target="modsim2"/>
-		</Unit>
 		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/iterative_solver.cpp">
 			<Option target="modsim2"/>
 		</Unit>
@@ -156,8 +150,6 @@
 		</Unit>
 		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/main01.cpp">
 			<Option target="modsim2"/>
-		</Unit>
-		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/main03.cpp">
 			<Option target="executable03"/>
 		</Unit>
 		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/matrix.cpp">
@@ -176,12 +168,6 @@
 			<Option target="modsim2"/>
 		</Unit>
 		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/sparse_matrix.h">
-			<Option target="modsim2"/>
-		</Unit>
-		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/structured_grid.cpp">
-			<Option target="modsim2"/>
-		</Unit>
-		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/structured_grid.h">
 			<Option target="modsim2"/>
 		</Unit>
 		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/util.cpp">

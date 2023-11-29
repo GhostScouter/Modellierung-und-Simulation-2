@@ -13,6 +13,7 @@
 #include "preconditioner_interface.h"
 #include "linear_solver_interface.h"
 #include <cstddef>
+#include <limits>
 
 /** @brief An iterative linear solver
  * This solver iterates the following process for a given matrix A and rhs b:
@@ -86,7 +87,7 @@ class IterativeSolver
 
 		bool m_bVerbose;
 		bool m_bInited;
-
+        const TMatrix* m_pA;
 		double* correction_vector;		// holds current improvents calculated by preconditioner
 		double* defect_vector;			// holds current defect calculated by iterative_solver
 
