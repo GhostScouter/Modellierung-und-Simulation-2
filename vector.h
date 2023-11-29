@@ -17,7 +17,7 @@ class Vector: public std::vector<double>
 
 	public:
     double* vector; // Member variable to hold the array
-    int vectorSize; // Member variable to hold the size of the array
+    size_t vectorSize; // Member variable to hold the size of the array
 	double vectorFilling; // Member variable with the value that the array contains at all positions
 
 	public:

@@ -39,17 +39,20 @@ set(SOURCES
 		vector.cpp
 		matrix.cpp
 		sparse_matrix.cpp
-
+		structured_grid.cpp
+		poisson_disc.cpp
 		iterative_solver.cpp
 		lu_solver.cpp
 		jacobi.cpp
-	gauss_seidel.cpp
+		gauss_seidel.cpp
+		util.cpp
+		vtk_exporter.cpp
 )
 
 add_library(modsim2 ${SOURCES} ${linkLibraries})
 
 
 ## targets
-add_executable(executable02 main01.cpp)
-target_link_libraries(executable02 modsim2 ${linkLibraries})
+add_executable(executable03 main03.cpp)
+target_link_libraries(executable03 modsim2 ${linkLibraries})
 

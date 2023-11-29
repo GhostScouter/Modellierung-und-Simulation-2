@@ -32,7 +32,7 @@ bool Jacobi<TMatrix>::apply(vector_type& c, const vector_type& d) const
     for(size_t i = 0;i < d.size(); i++){		// über Vektorgröße
 
         c[i] =  m_damp * d[i] / m_A(i,i);		// d[i] * A^(-1)[i,i] = d[i] / A[i,i]
-    
+
 	}
 
     return true;

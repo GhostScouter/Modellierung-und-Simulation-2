@@ -1,0 +1,10 @@
+# ninja log v5
+1	1717	7226310664684349	CMakeFiles/modsim2.dir/vector.cpp.obj	ed013f3aa70cc995
+23	1939	7226310666944350	CMakeFiles/modsim2.dir/lu_solver.cpp.obj	e3eb8c37ae29d4aa
+44	2064	7226310668204319	CMakeFiles/executable02.dir/main01.cpp.obj	c13b98ab83908c8c
+35	2101	7226310668564308	CMakeFiles/modsim2.dir/sparse_matrix.cpp.obj	f1aab7f3fd2ec28f
+3	315	7226408293232416	build.ninja	8763825603f3527e
+35	1580	7226408309702411	CMakeFiles/modsim2.dir/structured_grid.cpp.obj	77a0db0ef5dc4f69
+26	1689	7226408310772412	CMakeFiles/modsim2.dir/vtk_exporter.cpp.obj	e45e046ee8089595
+44	2091	7226408314822399	CMakeFiles/modsim2.dir/poisson_disc.cpp.obj	b55fd770c1306112
+1581	2502	7226408318922397	CMakeFiles/modsim2.dir/util.cpp.obj	cf1d0064bdd681df

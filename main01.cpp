@@ -179,4 +179,3 @@ int main(int argc, char** argv)
     //now you should be able to solve exercise 3!
     return 0;
 }
-

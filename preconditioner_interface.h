@@ -17,8 +17,7 @@
  * provide the method apply() which will perform one step of the method
  * resulting in a correction vector that can be used, e.g., in an IterativeSolver.
  */
-template <typename TMatrix>
-class IPreconditioner
+template <typename TMatrix> class IPreconditioner
 {
 	typedef Vector vector_type;
 	typedef TMatrix matrix_type;

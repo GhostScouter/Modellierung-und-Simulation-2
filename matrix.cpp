@@ -5,11 +5,11 @@
  *      Author: 
  */
 
-#include "matrix.h"
-#include "vector.h"
 #include <cassert>
 #include <iostream>
 #include <iomanip>
+#include "matrix.h"
+#include "vector.h"
 
 Matrix::Matrix()
 {}
