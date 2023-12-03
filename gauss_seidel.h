@@ -18,7 +18,7 @@ class GaussSeidel
 {
 	private:
 
-		Matrix Inverse;
+		TMatrix Inverse;
 		
 	public:
 		typedef Vector vector_type;

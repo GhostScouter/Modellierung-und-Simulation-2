@@ -20,11 +20,10 @@ GaussSeidel<TMatrix>::GaussSeidel()
 template <typename TMatrix>
 bool GaussSeidel<TMatrix>::init(const vector_type& x)
 {
-	// hier invertieren?
-	Matrix A = *(this->m_A);												// copies the const Matrix A
-	Matrix Inverse = Matrix(A.m_rows, A.m_cols, 0.0);				// will save M^-1
-	Matrix calculation_slave = Matrix(A.m_rows, A.m_cols, 0.0);		// will be used when necessary
-
+	// First, we invert the matrix to be able to work with it?
+	
+	TMatrix Inverse = TMatrix(m_pA.m_rows, m_pA.m_cols, 0.0);				// will save M^-1
+	TMatrix calculation_slave = TMatrix(m_pA.m_rows, m_pA.m_cols, 0.0);		// will be used when necessary
 
 	// ############## Set R-part to 0 ##############
 	// The Inverse already only contains zeros
@@ -35,15 +34,14 @@ bool GaussSeidel<TMatrix>::init(const vector_type& x)
 
 	double factor = 0;									// will scale each row down, so that it starts with the number 1
 
-    for (int i = 0; i < (m_A->m_cols); ++i) {			// iterate over Matrix rows
-        factor = A[i*A.m_cols];							// find downscaling factor (ie. matrix diagonal entry)
+    for (int i = 0; i < (m_pA->m_cols); ++i) {			// iterate over Matrix rows
 
-		calculation_slave[i*A.m_cols] = 1;				// build calculation_slave with diagonal of 1
-		calculation_slave[i*A.m_cols] = 1;				// build calculation_slave with diagonal of 1
+        factor = Inverse[i*m_pA.m_cols];				// find downscaling factor (ie. matrix diagonal entry)
+		calculation_slave[i*m_pA.m_cols] = 1;			// build calculation_slave with diagonal of 1
 
-        for (int j = 0; j < A.m_cols; ++j) {			// will scale each entry down, so that the rows have a 1 at the diagonal position
-			if (i > j){
-				Inverse[i*A.m_cols + j] = A[i*A.m_cols + j] / factor;		// scale entries down
+        for (int j = 0; j < m_pA.m_cols; ++j) {			// will scale each entry down, so that the rows have a 1 at the diagonal position
+			if (i > j){									// Left-lower part excluding diagonal
+				Inverse[i*m_pA.m_cols + j] = m_pA[i*m_pA.m_cols + j] / factor;		// scale entries down
 			}
 		}
 	}
@@ -52,27 +50,28 @@ bool GaussSeidel<TMatrix>::init(const vector_type& x)
 	// The calculation_slave has the entry 1 along the diagonal
 	// All other entries of calculation_slave are scaled down accordingly
 
-	for (int k = 0; k < A.m_cols; k++){							// traverse diagonal entries
+	for (int k = 0; k < m_pA.m_cols; k++){							// traverse diagonal entries
 
-		for (int i = 0; i < A.m_cols; i++){						// in each column
+		for (int i = 0; i < m_pA.m_cols; i++){						// in each column
 
-			factor = calculation_slave[i * A.m_cols + k];		// like before, we find the factor to use for the elimination 		
+			factor = calculation_slave[i * m_pA.m_cols + k];		// like before, we find the factor to use for the elimination 		
 
-			for (int j = 0; j < A.m_cols; j++){					// with the factor in hand, we iterate through the row and perfom the elimination
+			for (int j = 0; j < m_pA.m_cols; j++){					// with the factor in hand, we iterate through the row and perfom the elimination
 			
-				Inverse[i * A.m_cols + j] -= factor * calculation_slave[i * A.m_cols + k];
-				// this line takes an entry Inverse[i][j] and substracts the factor * entry from it
+				Inverse[i * m_pA.m_cols + j] -= factor * calculation_slave[i * m_pA.m_cols + k];
+				// this line takes an entry Inverse[i][j] and substracts the factor times the corresponding diagonal entry from it
 			}
 		}
 	}
-
+	Inverse.
+	
 	return true;
 }
-
 
 template <typename TMatrix>
 bool GaussSeidel<TMatrix>::apply(vector_type& c, const vector_type& d) const
 {
+
 	// Vektor d enthält den Defekt
 	// Vektor c enthält Korrekturen, um den Lösungsvektor zu verbessern
 

@@ -6,17 +6,20 @@
  */
 
 #include "iterative_solver.h"
+#include "matrix.h"
+#include "sparse_matrix.h"
+
 
 template <typename TMatrix>
 IterativeSolver<TMatrix>::IterativeSolver(const matrix_type& mat)
 {
-
-    m_pA = &mat;
+	matrix_type* m_pA = mat;
     m_corrector = nullptr;
     m_nit = 1;
     m_minDef = 1e-50;
     m_minRed = 1e-50;
     m_bVerbose = false;
+    m_pA = &mat;
     m_bInited = false;
 }
 
@@ -45,15 +48,14 @@ void IterativeSolver<TMatrix>::set_corrector(corrector_type* stepMethod)
 template <typename TMatrix>
 bool IterativeSolver<TMatrix>::init(const vector_type& x)
 {
-	if(m_corrector){return this->m_corrector->init(x);}
-    return true;
+	if(m_corrector){m_corrector->init(x);}
 }
 
 
 template <typename TMatrix>
 void IterativeSolver<TMatrix>::set_matrix(const matrix_type* A)
 {
-	m_pA = A;
+	m_pA->A;
     if(m_corrector){m_corrector->set_matrix(A);}
 }
 
@@ -77,7 +79,7 @@ bool IterativeSolver<TMatrix>::solve(vector_type& x, const vector_type& b) const
 
 	//defekt d berechnen (Vektor)
     Vector defect_vector = Vector(x.size());            // speichert d ab
-    defect_vector = m_pA->operator*(x);                  // M*x
+    defect_vector = m_pA.operator*(x);                  // M*x
     defect_vector.operator-=(b);                        // - b
     // d = Ax - b abgeschlossen
 
@@ -102,7 +104,7 @@ bool IterativeSolver<TMatrix>::solve(vector_type& x, const vector_type& b) const
         counter += 1;
 
         //korrektor ausführen (jacobi, gauss seidel etc.)
-        m_corrector->apply(correction_vector, defect_vector);
+        correction_vector->apply(correction_vector, defect_vector);
         // FRAGE: Funktioniert so die Übergabe korrekt? correction_vector soll mit Inhalten c[i] gefüllt werden!
 
         //Korrekturschritt für unseren lösungsvektor x
@@ -110,12 +112,12 @@ bool IterativeSolver<TMatrix>::solve(vector_type& x, const vector_type& b) const
 
         //defekt updaten
         def_last = def;                         // speichere Fehler von letzter Iteration als def_last ab 
-        defect_vector -= m_pA->operator*(correction_vector);
+        defect_vector -= m_pA.operator*(c);     // neuer def_vektor STOPP C EXISTIERT NICHT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         def = defect_vector.norm();             // norm davon ist Fehlergröße
 
         //alle k schritte sollte nun der aktuelle defekt mit aktueller iterationszahl etc
         //ausgegeben werden
-        if(counter % 5 == 0){
+        if(counter % 100 == 0){
             
             std::cout << "Aktuelle Iteration: " << counter << " ----- Aktueller Defekt: " << def << std::endl;
 
