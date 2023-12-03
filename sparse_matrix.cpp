@@ -5,18 +5,16 @@
  *      Author: 
  */
 
+#include "sparse_matrix.h"
 #include <iostream>
 #include <iomanip>
-#include "vector.h"
-#include "matrix.h"
-#include "sparse_matrix.h"
 
 
 SparseMatrix::SparseMatrix()
 {
-	m_rows = 0;
+    m_rows = 0;
     m_cols = 0;
-    m_row_capacity = 5;
+    m_row_capacity = 9;
     m_values = std::vector<double>(0, m_zero);
     m_col_inds = std::vector<size_t>(m_row_capacity * m_rows, (size_t) - 1);
 }
@@ -38,22 +36,22 @@ SparseMatrix::~SparseMatrix()
 
 std::size_t SparseMatrix::num_rows() const
 {
-	return m_rows;
+    return m_rows;
 }
 
 
 std::size_t SparseMatrix::num_cols() const
 {
-	return m_cols;
+    return m_cols;
 }
 
 
 void SparseMatrix::resize(std::size_t r, std::size_t c, double defVal)
 {
-	m_values.resize(m_row_capacity * r, defVal);            // passe rows erstmal an
-    m_col_inds.resize(m_row_capacity * r, (size_t) - 1);    // passe rows erstmal an
+    m_values.resize(m_row_capacity * r, defVal);
+    m_col_inds.resize(m_row_capacity * r, (size_t) - 1);
 
-    m_rows = r;                                             // falls columns größer geworden sind, passiert (fast) nichts
+    m_rows = r;
     if(c >= m_cols){
         m_cols = c;
         return;
@@ -61,10 +59,10 @@ void SparseMatrix::resize(std::size_t r, std::size_t c, double defVal)
 
     m_cols = c;
     for(size_t i = 0; i < m_row_capacity * r; ++i){
-        if(m_col_inds[i] < m_cols){                         // lasse klein genuge Einträge in Ruhe
+        if(m_col_inds[i] < m_cols){
             continue;
         }
-        m_col_inds[i] = (size_t) -1;                        // lösche die alten Werte falls zu groß
+        m_col_inds[i] = (size_t) -1;
     }
 }
 
@@ -72,10 +70,10 @@ void SparseMatrix::resize(std::size_t r, std::size_t c, double defVal)
 
 template<bool is_const>
 SparseMatrix::RowIteratorBase<is_const>::RowIteratorBase
-(
-	typename iterator_traits<is_const>::matrix_type& mat,
-	std::size_t rowIndex
-)
+        (
+                typename iterator_traits<is_const>::matrix_type& mat,
+                std::size_t rowIndex
+        )
 {
     pMat = &mat;
     if(pMat->num_rows() <= rowIndex){
@@ -88,15 +86,15 @@ SparseMatrix::RowIteratorBase<is_const>::RowIteratorBase
 
 template<bool is_const>
 SparseMatrix::RowIteratorBase<is_const>::RowIteratorBase
-(
-	typename SparseMatrix::iterator_traits<is_const>::matrix_type& mat,
-	std::size_t rowIndex,
-	std::size_t startFromCol
-)
+        (
+                typename SparseMatrix::iterator_traits<is_const>::matrix_type& mat,
+                std::size_t rowIndex,
+                std::size_t startFromCol
+        )
 {
-    pCurInd = &mat.m_col_inds[rowIndex * mat.m_row_capacity];       // funtkioniert auch mit " + startFromCol" ?
-    pCurVal = &mat.m_values[rowIndex * mat.m_row_capacity];         // damit müsste die for-Loop gespart werden?
-	for(size_t i = 0; i < mat.m_row_capacity; ++i){
+    pCurInd = &mat.m_col_inds[rowIndex * mat.m_row_capacity];
+    pCurVal = &mat.m_values[rowIndex * mat.m_row_capacity];
+    for(size_t i = 0; i < mat.m_row_capacity; ++i){
         if(*pCurInd == startFromCol){
             break;
         }
@@ -177,7 +175,7 @@ bool SparseMatrix::has_entry(std::size_t r, std::size_t c) const
     if(r >= m_rows || c >= m_cols){
         throw std::runtime_error("matrix request out of bounds...");
     }
-    for(size_t i = 0; i < m_row_capacity; ++i){         // suche im sinnvollen Bereich
+    for(size_t i = 0; i < m_row_capacity; ++i){
         if(m_col_inds[r * m_row_capacity + i] == c){
             return true;
         }
@@ -199,13 +197,13 @@ double SparseMatrix::operator()(std::size_t r, std::size_t c) const
 
 double& SparseMatrix::operator()(std::size_t r, std::size_t c)
 {
-	//find entry if it exists
+    //find entry if it exists
     size_t nr_row_elements = 0;
     for(size_t i = 0; i < m_row_capacity; ++i){
         if(m_col_inds[r * m_row_capacity + i] < (size_t) -1){
-            ++nr_row_elements;                                  // Zähle die gefundenen Elemente, die nicht -1 sind.
+            ++nr_row_elements;
         }
-        if(m_col_inds[r * m_row_capacity + i] == c){            // In ColInds stehen ja Column-Nummern. Daher teste, ob c gefunden wird
+        if(m_col_inds[r * m_row_capacity + i] == c){
             return m_values[r * m_row_capacity +i];
         }
     }
@@ -231,7 +229,7 @@ double& SparseMatrix::operator()(std::size_t r, std::size_t c)
 
 Vector SparseMatrix::operator*(Vector v) const
 {
-	Vector b(m_rows, 0);
+    Vector b(m_rows, 0);
 
     for(size_t r = 0; r < m_rows; ++r){
         SparseMatrix::ConstRowIterator it = this->begin(r);
@@ -252,7 +250,7 @@ void SparseMatrix::clear(){
 
 std::ostream& operator<<(std::ostream& stream, const SparseMatrix& m)
 {
-	for(size_t r = 0; r < m.num_rows(); ++r){
+    for(size_t r = 0; r < m.num_rows(); ++r){
         for(size_t c = 0; c < m.num_cols(); ++c){
             std::cout << std::setw(6) << std::setfill(' ') << std::setprecision(2) << std::fixed << m(r,c) << "\t";
         }

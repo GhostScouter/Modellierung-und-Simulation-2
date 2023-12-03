@@ -8,8 +8,10 @@
 #ifndef ITERATIVE_SOLVER_H
 #define ITERATIVE_SOLVER_H
 
-
+#include <vector>
 #include "vector.h"
+#include "matrix.h"
+#include "sparse_matrix.h"
 #include "preconditioner_interface.h"
 #include "linear_solver_interface.h"
 #include <cstddef>

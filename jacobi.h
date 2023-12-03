@@ -13,28 +13,29 @@
 
 
 template <typename TMatrix>
-class Jacobi
-: public IPreconditioner<TMatrix>
+class Jacobi : public IPreconditioner<TMatrix>
 {
-	public:
-		typedef Vector vector_type;
-		typedef TMatrix matrix_type;
+public:
+    typedef Vector vector_type;
+    typedef TMatrix matrix_type;
 
-	public:
-		/// constructor
-		Jacobi();
+public:
+    /// constructor
+    Jacobi();
 
-		/// @copydoc IPreconditioner::init
-		virtual bool init(const vector_type& x);
+    /// @copydoc IPreconditioner::init
+    virtual bool init(const vector_type& x);
 
-		/// @copydoc IPreconditioner::apply
-		virtual bool apply(vector_type& c, const vector_type& d) const;
-    
-        /// sets the damping factor
-        void set_damping(double damp) {m_damp = damp;}
-        
-    protected:
-    	double m_damp;
+    /// @copydoc IPreconditioner::apply
+    virtual bool apply(vector_type& c, const vector_type& d) const;
+
+    /// sets the damping factor
+    void set_damping(double damp) {
+        m_damp = damp;
+    }
+
+protected:
+    double m_damp;
 };
 
 #endif // JACOBI_H

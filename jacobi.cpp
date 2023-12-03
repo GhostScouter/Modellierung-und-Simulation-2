@@ -11,13 +11,14 @@ Author:
 
 template <typename TMatrix>
 Jacobi<TMatrix>::Jacobi()
-{}
+{
+    m_damp = 0.8;
+}
 
 
 template <typename TMatrix>
 bool Jacobi<TMatrix>::init(const vector_type& x)
 {
-    m_damp = 0.8;
     return true;
 }
 
@@ -25,14 +26,14 @@ bool Jacobi<TMatrix>::init(const vector_type& x)
 template <typename TMatrix>
 bool Jacobi<TMatrix>::apply(vector_type& c, const vector_type& d) const
 {
-	// Vektor d enthält den Defekt
-	// Vektor c enthält gedämpfte Korrekturen, um den Lösungsvektor zu verbessern
+    // Vektor d enthält den Defekt
+    // Vektor c enthält gedämpfte Korrekturen, um den Lösungsvektor zu verbessern
 
     for(size_t i = 0;i < d.size(); i++){		// über Vektorgröße
 
-        c[i] =  m_damp * d[i] / m_A(i,i);		// d[i] * A^(-1)[i,i] = d[i] / A[i,i]
-    
-	}
+        c[i] =  m_damp * d[i] / this->m_A->operator()(i,i);		// d[i] * A^(-1)[i,i] = d[i] / A[i,i]
+
+    }
 
     return true;
 }

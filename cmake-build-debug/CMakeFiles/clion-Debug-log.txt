@@ -1,18 +1,18 @@
 "C:\Program Files\JetBrains\CLion 2023.2.2\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" -S D:\BA\Modellierung-und-Simulation-2 -B D:\BA\Modellierung-und-Simulation-2\cmake-build-debug
--- The C compiler identification is GNU 7.2.0
--- The CXX compiler identification is GNU 7.2.0
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Check for working C compiler: C:/Program Files/Haskell Platform/8.6.3/mingw/bin/cc.exe - skipped
--- Detecting C compile features
--- Detecting C compile features - done
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: C:/Program Files/Haskell Platform/8.6.3/mingw/bin/c++.exe - skipped
--- Detecting CXX compile features
--- Detecting CXX compile features - done
 -- DEBUG     ON
 -- PARALLEL     OFF
--- Configuring done (3.1s)
--- Generating done (0.1s)
--- Build files have been written to: D:/BA/Modellierung-und-Simulation-2/cmake-build-debug
+-- Configuring done (0.2s)
+CMake Error at CMakeLists.txt:54 (add_library):
+  Cannot find source file:
+
+    //gauss_seidel.h
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .mpp .m .M .mm .ixx .cppm .h
+  .hh .h++ .hm .hpp .hxx .in .txx .f .F .for .f77 .f90 .f95 .f03 .hip .ispc
+
+
+CMake Error at CMakeLists.txt:54 (add_library):
+  No SOURCES given to target: modsim2
+
+
+CMake Generate step failed.  Build files cannot be regenerated correctly.
