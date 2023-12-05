@@ -108,7 +108,7 @@ void printVectorOnGrid(Vector& u, size_t nElemsPerDim){
 
 int main(int argc, char** argv)
 {
-    std::cout << "hello world " << std::endl;
+    //std::cout << "hello world " << std::endl;
 
     //unit test for LU
     //LU_test(5);

@@ -1,18 +1,6 @@
 "C:\Program Files\JetBrains\CLion 2023.2.2\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" -S D:\BA\Modellierung-und-Simulation-2 -B D:\BA\Modellierung-und-Simulation-2\cmake-build-debug
 -- DEBUG     ON
 -- PARALLEL     OFF
--- Configuring done (0.2s)
-CMake Error at CMakeLists.txt:54 (add_library):
-  Cannot find source file:
-
-    //gauss_seidel.h
-
-  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .mpp .m .M .mm .ixx .cppm .h
-  .hh .h++ .hm .hpp .hxx .in .txx .f .F .for .f77 .f90 .f95 .f03 .hip .ispc
-
-
-CMake Error at CMakeLists.txt:54 (add_library):
-  No SOURCES given to target: modsim2
-
-
-CMake Generate step failed.  Build files cannot be regenerated correctly.
+-- Configuring done (0.3s)
+-- Generating done (0.1s)
+-- Build files have been written to: D:/BA/Modellierung-und-Simulation-2/cmake-build-debug

@@ -30,7 +30,7 @@ void VTKExporter<dim>::export_vector(const Vector& vec, const std::string& fctNa
 	std::ofstream outFile (filename);
 
 	if (outFile.is_open()){
-		std::cout "File created successfully." << std::endl;
+		std::cout << "File created successfully." << std::endl;
 
 
 	// Schreibe "Header" hinein
@@ -84,11 +84,9 @@ void VTKExporter<dim>::export_vector(const Vector& vec, const std::string& fctNa
 	outFile.close();
 
 	}// Falls File nicht erstellt werden konnte:
-	else{
-		std::cerr << "Error creating File." << std::endl;
-	}
-	
-	return 0;
+	else {
+        std::cerr << "Error creating File." << std::endl;
+    }
 }
 
 
