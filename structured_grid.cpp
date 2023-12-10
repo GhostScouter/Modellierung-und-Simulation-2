@@ -1,11 +1,11 @@
 
 
 #include "structured_grid.h"
-#include "coord_vector.h"
-#include "vector.h"
+
 #include <cmath>
 
 #include <stdexcept>  // for std::runtime_error
+#include <iostream>
 
 
 template <std::size_t dim>
@@ -15,135 +15,123 @@ StructuredGrid<dim>::StructuredGrid
 	const CoordVector<dim>& upperBounds,
 	const CoordVector<dim, std::size_t>& resolution
 )
-{}
-
+{
+    m_lowerBnds = lowerBounds;
+    m_upperBnds = upperBounds;
+    m_resolution = resolution;
+}
 
 
 template <std::size_t dim>
 std::size_t StructuredGrid<dim>::num_vertices() const
 {
-    double product = 1.0;
+    size_t product = 1;
 
-    for(size_t i = 0; i < dim-1; i++){
-        product *= m_h[i];
+    for(size_t i = 0; i < dim; i++){
+        product *= m_resolution[i];
     }
+    return product;
 }
 
 
 template <std::size_t dim>
 void StructuredGrid<dim>::vertex_coords(CoordVector<dim>& coordsOut, std::size_t ind) const
 {
-    // TODO: implement
-    throw std::runtime_error("not implemented");
+    // Diese Funktion soll von einem Index die "wahren Koordinaten" ermitteln
+    // nehme multikoordinaten
+    // berechne mit (Start + Schritte * Schrittweite) die vertex_coords
+    // schreibe in coordsOut
 
+    CoordVector<dim, size_t> temp_coords;         // soll die multiindex Koordinaten halten
+    temp_coords = multi_index(ind);
+
+    for(size_t i = 0; i < dim; i++){
+        coordsOut[i] = m_lowerBnds[i] + temp_coords[i]*((m_upperBnds[i]-m_lowerBnds[i])/m_resolution[i]);
+        // Startpunkt des Grids plus Schritte * Schrittweite
+    }
 }
 
 
 template <std::size_t dim>
 std::size_t StructuredGrid<dim>::index(const CoordVector<dim, std::size_t>& vMultiIndex) const
 {
-    // Finde den Index einer Vertex gegeben der Koordinaten im Grid
-    // the big challenges are finding the relative Position in the grid and then calculating the index
+    // Diese Funktion soll, gegeben eines Multiindexes, den Index finden
 
-    Vector Multiplikatoren = Vector(dim);        // this will save our lexicographic ordering factors
-    double temp_product = num_vertices();        // we will divide resolution from this number
+    Vector Multiplikatoren = Vector(dim);              // this will save our lexicographic ordering factors
+    size_t number_of_vertices = num_vertices();        // we will divide resolution from this number
 
     // define (dim)-many multiplicators for the indexing
 
-    for(size_t i = 0; i < dim-1; i++){
-        temp_product /= m_resolution[i];         // Since we want to start counting in the direction of the x-axis
-        Multiplikatoren[i] = temp_product;       // for a 24 vertex grind, these factors could look like this: [6,4,1]
+    for(size_t i = 0; i < dim; i++){
+        //std::cout << m_resolution[i] << std::endl;
+        number_of_vertices /= m_resolution[i];         // Since we want to count in the direction of the x-axis first
+        Multiplikatoren[i] = number_of_vertices;       // for a 24 vertex grid, these factors could look like this: [6,2,1]
     }
 
-    // Since we only have the absolute position of a vertex, we now seek the relative Koordinate of a vertex in the grid
-    // Given the lowerBounds and the Schrittweite, which we derive from the resolution, we yield the sought information
+    // with multiindex and multiplicators at hand, we can calculate the position easily
 
-    Vector relative_position_in_grid = Vector(dim);
-    for(size_t i = 0; i < dim-1; i++){
-        relative_position_in_grid[i] = (vMultiIndex[i]- m_lowerBnds[i]) / ((m_upperBnds[i]-m_lowerBnds[i])/(m_resolution[i]-1));
+    size_t index = 0;                                   // start at 0, if the vertex is at position (0,0,0)
+    for(size_t i = 0; i < dim; i++){                    // for each dimention, we increade the index by the multiindex position * multiplier
+        index += vMultiIndex[i] * Multiplikatoren[i];   // for every step into x-direction, we add the x-multiplier (here: 6)
     }
 
-    // with the relative position and the ordering factors at hand, we can calculate the position
-    size_t index = 0;
-    for(size_t i = 0; i < dim-1; i++){
-        index += vMultiIndex[i] * relative_position_in_grid[i];
-    }
+    return index;
 }
 
 
 template <std::size_t dim>
 CoordVector<dim, std::size_t> StructuredGrid<dim>::multi_index(std::size_t ind) const
 {
-
     // Finde Koordinaten eines Vertex im Grid bei gegebenem Index
-
-    CoordVector result = CoordVector<dim, std::size_t>();
-
+    // generiere Variablen
+    CoordVector<dim, std::size_t> results;     // erstelle den results Coordvector
     int index = static_cast<int>(ind);
 
     // like in the index function, we need the Multiplikatoren:
 
-    Vector Multiplkatoren = Vector(dim);        // this will save our lexicographic ordering factors
-    double temp_product = num_vertices();       // we will divide resolution from this number
+    Vector Multiplkatoren = Vector(dim);            // this will save our lexicographic ordering factors
+    size_t temp_product = num_vertices();           // we will divide resolution from this number
 
-    for(size_t i = 0; i < dim-1; i++){
-        temp_product /= m_resolution[i];        // Since we want to start counting in the direction of the x-axis
-        Multiplkatoren[i] = temp_product;       // for a 24 vertex grind, these factors could look like this: [6,2,1]
+    for(size_t i = 0; i < dim; i++){
+        temp_product /= m_resolution[i];            // Since we want to start counting in the direction of the x-axis
+        Multiplkatoren[i] = temp_product;           // for a 24 vertex grind, these factors could look like this: [6,2,1]
     }
 
-
-    for(size_t i = 0; i < dim-1; i++) {         // here we divide by the given multiplicators to derive the coordinates
-        result[i] = floor(index / Multiplkatoren[i]);       // Ergebnisse sind floored und daher size_t
+    for(size_t i = 0; i < dim; i++) {               // divide by the given multiplicators to derive coordinates
+        results[i] = floor(index / Multiplkatoren[i]);      // Ergebnisse sind floored und daher size_t
     }
 
-    return result;
+    return results;
 }
 
 
 template <std::size_t dim>
 void StructuredGrid<dim>::vertex_neighbors(std::vector<std::size_t>& neighborsOut, std::size_t ind) const
 {
-    for(size_t i = 0; i < dim; i ++){      // first, we generate all possible neighbors
+    // build a neighbour vector from an index
+    // transform to multiindex -> add 1 and substract one from each position
+    // if > upper_bound oder < lowerboud => error
 
-        neighborsOut[i] = ind + ((m_upperBnds[i]-m_lowerBnds[i])/(m_resolution[i]-1));      // the calculation returns the Schrittweite of our grid
-        neighborsOut[2*i] = ind - ((m_upperBnds[i]-m_lowerBnds[i])/(m_resolution[i]-1));    // essentially, we do one step in both directions
-
-    }
-
-    // wir prüfen nun die Exitenz der Nachbarn
-    // zuerst bilden wir den "Faktoren" Vektor, der zur prüfung hilfreich ist
-
-    Vector Multiplikatoren = Vector(dim);               // this will save our lexicographic ordering factors
-    Vector factorisation_vertex = Vector(dim);          // save factorisation of vertex
-    Vector factorisation_neighbor = Vector(dim);        // save factorisation of neighbor
-    double temp_product = num_vertices();               // we will divide resolution from this number
-
-    for(size_t i = 0; i < dim-1; i++){
-        temp_product /= m_resolution[i];                // Since we want to start counting in the direction of the x-axis
-        Multiplikatoren[i] = temp_product;              // for a 24 vertex grind, these factors could look like this: [6,2,1]
-    }
-
-    for(int j = 0; j < dim; j++) {                   // find factorisation of vertex to compare to neighbor
-        factorisation_vertex[j] = ind / Multiplikatoren[j];
-    }
+    CoordVector<dim, std::size_t> temp_coords;          // soll die multiindex Koordinaten halten
+    temp_coords = multi_index(ind);                                     // halte multiindex des fraglichen Knotens
 
 
-    for(size_t i = 0; i < 2*dim; i++){
-        CoordVector KoordinateEinesNachbarn = multi_index(i);   // Koordinatendarstellung des Nachbarn
-        int error = 0;
+    for(size_t i = 0; i < dim; i++){
 
-        if(neighborsOut[i] < 0 || ind > num_vertices()-1){          // the index cant be lower than zero or higher than X
-            neighborsOut.erase(i);
+        if(temp_coords[i] == m_lowerBnds[i]){               //  if the multiindex is at the lower border, only add a neighbour + 1
+            temp_coords[i] += 1;
+            neighborsOut.push_back(index(temp_coords));
+        }
+        else if(temp_coords[i] == m_upperBnds[i]){          //  if the multiindex is at the upper border, only add a neighbour - 1
+            temp_coords[i] -= 1;
+            neighborsOut.push_back(index(temp_coords));
         }
 
-        // This is trickier: We also must make sure only real neighbors are neighbors
-
-        for(int j = 0; j < dim; j++){                               // find factorisation of neighbor and compare to vertex
-            factorisation_neighbor [j] = ind / Multiplikatoren[j];
-
-            if(factorisation_neighbor[j] != factorisation_vertex[j]) {  // if 2 Factors are different, the vertices are not neigbors!
-                neighborsOut.erase[i];
-            }
+        else{                                               // we add both neighbors
+            temp_coords[i] += 1;
+            neighborsOut.push_back(index(temp_coords));
+            temp_coords[i] -= 2;
+            neighborsOut.push_back(index(temp_coords));   
         }
     }
 }
@@ -153,11 +141,11 @@ template <std::size_t dim>
 bool StructuredGrid<dim>::is_boundary(std::size_t ind) const
 {
     // ermittle Koordinaten von Vertex
-    CoordVector Coordinates = multi_index(ind);      // Speichert Multi-Koordinaten der Vertex
-
+    CoordVector<dim, std::size_t> temp_coords;      // Speichert Multi-Koordinaten der Vertex
+    temp_coords = multi_index(ind);
     // prüfe, ob mindestens eine Koordinate am unteren oder oberen Rand liegt
-    for(size_t i = 0; i < dim-1; i++) {
-        if (Coordinates[i] == m_lowerBnds[i] or Coordinates[i] == m_upperBnds[i]){
+    for(size_t i = 0; i < dim; i++) {
+        if (temp_coords[i] == m_lowerBnds[i] or temp_coords[i] == m_upperBnds[i]){
             return true;
         }
     }

@@ -76,9 +76,14 @@ template <typename TMatrix>
 bool IterativeSolver<TMatrix>::solve(vector_type& x, const vector_type& b) const{
 
     //defekt d berechnen (Vektor)
-    Vector defect_vector = Vector(x.size());            // speichert d ab
-    defect_vector = m_pA->operator*(x);                  // M*x
-    defect_vector.operator-=(b);                        // - b
+    Vector d = Vector(x.size());            // speichert d ab
+    //std::cout << "d: " << d << std::endl;
+    //std::cout << "x: " << x << std::endl;
+    std::cout << "m_pA: " << this << std::endl; //m_pA ist nur ein pointer?
+    d = m_pA->operator*(x);                  // M*x
+    //std::cout << "b" << b << std::endl;
+    std::cout << "d: " << d << std::endl;
+    d.operator-=(b);                        // - b
     // d = Ax - b abgeschlossen
 
 
@@ -86,7 +91,7 @@ bool IterativeSolver<TMatrix>::solve(vector_type& x, const vector_type& b) const
     Vector correction_vector = Vector(x.size());   	    // will hold improvements calculated by preconditioner
 
     //initiale defektnorm (skalar) zum Vergleich in der iteration behalten
-    double def0 = defect_vector.norm();
+    double def0 = d.norm();
 
     //defekt zum Update in der iteration
     double def = def0;
@@ -96,13 +101,16 @@ bool IterativeSolver<TMatrix>::solve(vector_type& x, const vector_type& b) const
 
     size_t counter = 0;                                          // zählt Iterationen
 
-    while(counter < m_nit && def > m_minDef && def > def0 * m_minRed){
+    std::cout << "bin ich mal hier?" << std::endl;
+
+    while(counter < m_nit && def > m_minDef && def > (def0 * m_minRed)){
+        std::cout << "bin hier ##############" << std::endl;
         // counter < m_nit UND Fehler groß genug UND relative Verbesserung groß genug
 
         counter += 1;
 
         //korrektor ausführen (jacobi, gauss seidel etc.)
-        m_corrector->apply(correction_vector, defect_vector);
+        m_corrector->apply(correction_vector, d);
         // FRAGE: Funktioniert so die Übergabe korrekt? correction_vector soll mit Inhalten c[i] gefüllt werden!
 
         //Korrekturschritt für unseren lösungsvektor x
@@ -110,18 +118,18 @@ bool IterativeSolver<TMatrix>::solve(vector_type& x, const vector_type& b) const
 
         //defekt updaten
         def_last = def;                         // speichere Fehler von letzter Iteration als def_last ab
-        defect_vector -= m_pA->operator*(correction_vector);
-        def = defect_vector.norm();             // norm davon ist Fehlergröße
+        d -= m_pA->operator*(correction_vector);
+        def = d.norm();             // norm davon ist Fehlergröße
 
         //alle k schritte sollte nun der aktuelle defekt mit aktueller iterationszahl etc
         //ausgegeben werden
         if(counter % 5 == 0){
 
-            std::cout << "Aktuelle Iteration: " << counter << " ----- Aktueller Defekt: " << def << std::endl;
+            //std::cout << "Aktuelle Iteration: " << counter << " ----- Aktueller Defekt: " << def << std::endl;
 
         }
     }
-    return 0;
+    return true;
 }
 
 

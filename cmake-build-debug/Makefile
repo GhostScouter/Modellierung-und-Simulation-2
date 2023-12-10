@@ -56,10 +56,10 @@ RM = "C:\Program Files\JetBrains\CLion 2023.2.2\bin\cmake\win\x64\bin\cmake.exe"
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\BA\Modellierung-und-Simulation-2
+CMAKE_SOURCE_DIR = "C:\Users\Ghost\OneDrive\Dokumente\A a Uni\M_01_Sem\Praktikum_Modellierung_und_Simulation_2\Git\Modellierung-und-Simulation-2"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\BA\Modellierung-und-Simulation-2\cmake-build-debug
+CMAKE_BINARY_DIR = "C:\Users\Ghost\OneDrive\Dokumente\A a Uni\M_01_Sem\Praktikum_Modellierung_und_Simulation_2\Git\Modellierung-und-Simulation-2\cmake-build-debug"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\BA\Modellierung-und-Simulation-2\cmake-build-debug\CMakeFiles D:\BA\Modellierung-und-Simulation-2\cmake-build-debug\\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\Ghost\OneDrive\Dokumente\A a Uni\M_01_Sem\Praktikum_Modellierung_und_Simulation_2\Git\Modellierung-und-Simulation-2\cmake-build-debug\CMakeFiles" "C:\Users\Ghost\OneDrive\Dokumente\A a Uni\M_01_Sem\Praktikum_Modellierung_und_Simulation_2\Git\Modellierung-und-Simulation-2\cmake-build-debug\\CMakeFiles\progress.marks"
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\BA\Modellierung-und-Simulation-2\cmake-build-debug\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\Ghost\OneDrive\Dokumente\A a Uni\M_01_Sem\Praktikum_Modellierung_und_Simulation_2\Git\Modellierung-und-Simulation-2\cmake-build-debug\CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -140,6 +140,30 @@ executable03: cmake_check_build_system
 executable03/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\executable03.dir\build.make CMakeFiles/executable03.dir/build
 .PHONY : executable03/fast
+
+gauss_seidel.obj: gauss_seidel.cpp.obj
+.PHONY : gauss_seidel.obj
+
+# target to build an object file
+gauss_seidel.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/gauss_seidel.cpp.obj
+.PHONY : gauss_seidel.cpp.obj
+
+gauss_seidel.i: gauss_seidel.cpp.i
+.PHONY : gauss_seidel.i
+
+# target to preprocess a source file
+gauss_seidel.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/gauss_seidel.cpp.i
+.PHONY : gauss_seidel.cpp.i
+
+gauss_seidel.s: gauss_seidel.cpp.s
+.PHONY : gauss_seidel.s
+
+# target to generate assembly for a file
+gauss_seidel.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/gauss_seidel.cpp.s
+.PHONY : gauss_seidel.cpp.s
 
 iterative_solver.obj: iterative_solver.cpp.obj
 .PHONY : iterative_solver.obj
@@ -312,6 +336,30 @@ sparse_matrix.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/sparse_matrix.cpp.s
 .PHONY : sparse_matrix.cpp.s
 
+structured_grid.obj: structured_grid.cpp.obj
+.PHONY : structured_grid.obj
+
+# target to build an object file
+structured_grid.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/structured_grid.cpp.obj
+.PHONY : structured_grid.cpp.obj
+
+structured_grid.i: structured_grid.cpp.i
+.PHONY : structured_grid.i
+
+# target to preprocess a source file
+structured_grid.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/structured_grid.cpp.i
+.PHONY : structured_grid.cpp.i
+
+structured_grid.s: structured_grid.cpp.s
+.PHONY : structured_grid.s
+
+# target to generate assembly for a file
+structured_grid.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\modsim2.dir\build.make CMakeFiles/modsim2.dir/structured_grid.cpp.s
+.PHONY : structured_grid.cpp.s
+
 util.obj: util.cpp.obj
 .PHONY : util.obj
 
@@ -394,6 +442,9 @@ help:
 	@echo ... rebuild_cache
 	@echo ... executable03
 	@echo ... modsim2
+	@echo ... gauss_seidel.obj
+	@echo ... gauss_seidel.i
+	@echo ... gauss_seidel.s
 	@echo ... iterative_solver.obj
 	@echo ... iterative_solver.i
 	@echo ... iterative_solver.s
@@ -415,6 +466,9 @@ help:
 	@echo ... sparse_matrix.obj
 	@echo ... sparse_matrix.i
 	@echo ... sparse_matrix.s
+	@echo ... structured_grid.obj
+	@echo ... structured_grid.i
+	@echo ... structured_grid.s
 	@echo ... util.obj
 	@echo ... util.i
 	@echo ... util.s

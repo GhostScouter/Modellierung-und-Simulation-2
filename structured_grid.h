@@ -4,6 +4,7 @@
 #define STRUCTURED_GRID_H
 
 #include "coord_vector.h"
+#include "vector.h"
 
 #include <cstddef>
 #include <vector>

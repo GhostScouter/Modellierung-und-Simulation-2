@@ -40,6 +40,10 @@ Matrix::Matrix(const Matrix& M){
 Matrix::~Matrix()
 {}
 
+void Matrix::printMatrix() const{
+
+}
+
 
 std::size_t Matrix::num_rows() const
 {

@@ -39,17 +39,18 @@ set(SOURCES
 		vector.cpp
 		matrix.cpp
 		sparse_matrix.cpp
-		#structured_grid.cpp
+		structured_grid.cpp
 		poisson_disc.cpp
 		iterative_solver.cpp
 		lu_solver.cpp
 		jacobi.cpp
-		#gauss_seidel.cpp
+		gauss_seidel.cpp
 		util.cpp
 		vtk_exporter.cpp
         main01.cpp
 		#main03.cpp
-        
+		#main_test.cpp
+
 )
 
 add_library(modsim2 ${SOURCES} ${linkLibraries})

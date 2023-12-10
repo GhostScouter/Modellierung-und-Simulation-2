@@ -4,7 +4,7 @@
 #include "sparse_matrix.h"
 #include "iterative_solver.h"
 #include "jacobi.h"
-//#include "gauss_seidel.h"
+#include "gauss_seidel.h"
 #include "lu_solver.h"
 
 #include <iostream>
@@ -114,7 +114,7 @@ int main(int argc, char** argv)
     //LU_test(5);
 
     //example for solving of poisson problem
-    size_t nElemsPerDim = 8;
+    size_t nElemsPerDim = 2;
     SparseMatrix A;
 
     Vector b, u;
@@ -142,10 +142,10 @@ int main(int argc, char** argv)
 
 
     //create preconditioners:
-    Jacobi<SparseMatrix> jac;
+    //Jacobi<SparseMatrix> jac;
     //
-    // GaussSeidel<SparseMatrix> gs;
-
+    GaussSeidel<SparseMatrix> gs;
+    /*
     //now set jacobi as preconditioner of iterative solver:
     iterative_solver.set_corrector(&jac);
     iterative_solver.init(u);
@@ -154,18 +154,19 @@ int main(int argc, char** argv)
 
     std::cout << "Jacobi finished with soultion: " << std::endl;
     printVectorOnGrid(u, nElemsPerDim);
+    */
 
-    /*
     //same for gauss seidel:
     iterative_solver.set_corrector(&gs);
     for (std::size_t i = 0;  i < u.size(); ++i)
         u[i] = std::rand() / (double) RAND_MAX;
 
     iterative_solver.init(u);
-    success = iterative_solver.solve(u,b);
+    bool success = iterative_solver.solve(u,b);
     std::cout << "Gauss-Seidel finished with soultion: " << std::endl;
     printVectorOnGrid(u, nElemsPerDim);
 
+    /*
     //do it with LU now
     Matrix M;
     LUSolver<Matrix> LU;

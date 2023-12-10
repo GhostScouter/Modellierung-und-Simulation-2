@@ -7,6 +7,7 @@
 
 #include "vtk_exporter.h"
 #include "coord_vector.h"
+#include "structured_grid.h"
 #include <fstream>
 #include <stdexcept>
 #include <sstream>
@@ -27,6 +28,20 @@ void VTKExporter<dim>::export_vector(const Vector& vec, const std::string& fctNa
 	// Diese Funktion bekommt einen Vektor gegeben und soll diesen exportieren
 	// Erstelle Dokument
 
+    CoordVector<dim, std::size_t> resolution;
+    resolution = m_grid.mesh_sizes();
+
+    CoordVector<dim> lowBounds;
+    lowBounds = m_grid.lower_bnds();
+
+    CoordVector<dim> upBounds;
+    upBounds = m_grid.upper_bnds();
+
+    /*
+    CoordVector<dim> elmSizes;
+    elmSizes = m_grid.element_sizes();
+    */
+
 	std::ofstream outFile (filename);
 
 	if (outFile.is_open()){
@@ -42,17 +57,17 @@ void VTKExporter<dim>::export_vector(const Vector& vec, const std::string& fctNa
 
 	// Wir geben nun Dimensions aus.
 	outFile << "DIMENSIONS";
-	
+
+
 	for(size_t i = 0; i < dim; i++){
-		outFile << " " << m_grid.m_resolution[i];
+		outFile << " " << resolution[i];
 	}
 	outFile << std::endl;
 
 	// Als nächstes geben wir "SPACING" aus. Vermutlich handelt es sich um die Schrittweiten? 
 	outFile << "SPACING";
-	
 	for(size_t i = 0; i < dim; i++){
-		outFile << " " << ((m_grid.m_upperBnds[i]-m_grid.m_lowerBnds[i])/m_grid.m_resolution[i]);
+		outFile << " " << ((upBounds[i]-lowBounds[i])/resolution[i]);
 	}
 	outFile << std::endl;
 
@@ -60,7 +75,7 @@ void VTKExporter<dim>::export_vector(const Vector& vec, const std::string& fctNa
 	outFile << "ORIGIN";
 	
 	for(size_t i = 0; i < dim; i++){
-		outFile << " " << m_grid.m_lowerBnds[i];
+		outFile << " " << lowBounds[i];
 	}
 	outFile << std::endl;
 
@@ -68,7 +83,7 @@ void VTKExporter<dim>::export_vector(const Vector& vec, const std::string& fctNa
 	outFile << "POINT DATA";
 	size_t result = 1;
 	for(size_t i = 0; i < dim; i++){
-		result *= m_grid.m_resolution[i];
+		result *= resolution[i];
 	} 
 	outFile << result << std::endl;
 
@@ -87,6 +102,7 @@ void VTKExporter<dim>::export_vector(const Vector& vec, const std::string& fctNa
 	else {
         std::cerr << "Error creating File." << std::endl;
     }
+
 }
 
 

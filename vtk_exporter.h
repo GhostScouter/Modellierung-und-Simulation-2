@@ -35,6 +35,9 @@ class VTKExporter
 
 	private:
 		const StructuredGrid<dim>& m_grid;
+
+    protected:
+        CoordVector<dim, std::size_t> m_resolution;
 };
 
 #endif // VTK_EXPORTER_H

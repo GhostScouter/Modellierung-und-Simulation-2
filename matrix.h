@@ -26,9 +26,12 @@ class Matrix
 		**/
 		Matrix(std::size_t r, std::size_t c, double val = 0.0);
 
+
         Matrix(const Matrix& M);
 		/// Destructor
 		virtual ~Matrix();
+
+        void printMatrix() const;
 
 		/// Return number of rows
 		std::size_t num_rows() const;

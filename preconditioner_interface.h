@@ -10,6 +10,7 @@
 
 #include "vector.h"
 #include "matrix.h"
+#include "sparse_matrix.h"
 
 
 /** @brief Interface class for iterative corrector methods.

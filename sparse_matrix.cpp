@@ -14,7 +14,7 @@ SparseMatrix::SparseMatrix()
 {
     m_rows = 0;
     m_cols = 0;
-    m_row_capacity = 9;
+    m_row_capacity = 4;
     m_values = std::vector<double>(0, m_zero);
     m_col_inds = std::vector<size_t>(m_row_capacity * m_rows, (size_t) - 1);
 }
@@ -33,6 +33,21 @@ SparseMatrix::SparseMatrix(std::size_t r, std::size_t c, std::size_t rowCapacity
 SparseMatrix::~SparseMatrix()
 {}
 
+void SparseMatrix::printMatrix() const{
+
+    std::cout << "Hier die Sparsematrix: " << std::endl;
+
+    std::cout << m_cols << std::endl;
+    std::cout << m_rows << std::endl;
+    std::cout << m_row_capacity << std::endl;
+    for(size_t i=0; i < m_row_capacity*m_rows; i++){
+        std::cout << m_col_inds[i] << ", ";
+    }
+    std::cout << std::endl;
+    for(size_t i=0; i < m_row_capacity*m_rows; i++){
+        std::cout <<m_values[i] << ", ";
+    }
+}
 
 std::size_t SparseMatrix::num_rows() const
 {
@@ -208,9 +223,11 @@ double& SparseMatrix::operator()(std::size_t r, std::size_t c)
         }
     }
     //did not find entry. check whether it can be created:
+    /*
     if(nr_row_elements == m_row_capacity){
         throw std::runtime_error("matrix entry not found. creation of new entry frobidden by row capacity...");
     }
+     */
     //since col indices are sorted, last entry has to be free
     size_t end_of_r = (r + 1) * m_row_capacity - 1;
     m_col_inds[end_of_r] = c;

@@ -37,6 +37,7 @@ class SparseMatrix
 		/// Destructor
 		virtual ~SparseMatrix();
 
+        void printMatrix() const;
 
 		/// Return number of rows
 		std::size_t num_rows() const;
