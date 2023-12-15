@@ -13,7 +13,7 @@
 #include <iomanip>
 #include <cstdlib>
 #include <chrono>
-
+#include <memory>
 
 
 void printVectorOnGrid(Vector& u, size_t nElemsPerDim) {
@@ -49,8 +49,8 @@ int main(int argc, char** argv){
     //upperBounds[1] = 100.0;
 
     CoordVector<dim, size_t> resolution(100);
-    resolution[0] = 100;
-    resolution[1] = 100;
+    resolution[0] = 3;
+    resolution[1] = 3;
 
     StructuredGrid<dim> grid(lowerBounds,upperBounds,resolution);
 
@@ -69,6 +69,8 @@ int main(int argc, char** argv){
                 std::cout << multi_index << std::endl;
                 size_t ind = grid.index(multi_index);
                 std::cout << ind << std::endl;
+                std::cout << grid.multi_index(ind) <<"\n\n" <<  std::endl;
+
 
                 CoordVector<dim> coords;
                 grid.vertex_coords(coords, ind);
@@ -79,7 +81,7 @@ int main(int argc, char** argv){
                 std::vector<std::size_t> neighborsOut;
                 grid.vertex_neighbors(neighborsOut, ind);
                 for(unsigned long d : neighborsOut){
-                    std::cout << grid.multi_index(d) << "    ";
+                    std::cout << d << "    ";
                 }
                 std::cout  << "\n"<< std::endl;
             }
@@ -88,7 +90,7 @@ int main(int argc, char** argv){
     //number of boundary vertices to inner vertices
     std::cout << "n bnd: " << c << std::endl;
     std::cout << "n inner: " <<  grid.num_vertices() - c << std::endl;
-
+    return -1;
     //create Poisson discretization (as a smart pointer)
     typedef PoissonDisc<dim, SparseMatrix> TElemDisc;
     typedef std::unique_ptr<PoissonDisc<dim, SparseMatrix>> T_spElemDisc;
@@ -101,7 +103,7 @@ int main(int argc, char** argv){
 
     //create VTKExporter and set analytic solution for later comparison
     auto pVTK = new VTKExporter<dim>(grid);
-    pVTK->set_function(dirichletBndFct);
+    // pVTK->set_function(dirichletBndFct);
 
 
 
@@ -114,7 +116,7 @@ int main(int argc, char** argv){
 
     //some test prints
     pVTK->export_vector(u, "u", "u0.vtk");
-    pVTK->export_delta(u, "delta0", "delta0.vtk");
+    // pVTK->export_delta(u, "delta0", "delta0.vtk");
 
     //assemble the discretization of poisson equation:
     sp_elemDisc->assemble(S, rhs, u, grid);
@@ -136,8 +138,8 @@ int main(int argc, char** argv){
 
     //activate printing of difference to the analytical solution
     //and set VTKExporter
-    iterative_solver.set_printDelta(true);
-    iterative_solver.set_vtk(pVTK);
+    //iterative_solver.set_printDelta(true);
+    // iterative_solver.set_vtk(pVTK);
 
     //start iteration scheme
     bool success = iterative_solver.solve(u, rhs);

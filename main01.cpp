@@ -114,7 +114,7 @@ int main(int argc, char** argv)
     //LU_test(5);
 
     //example for solving of poisson problem
-    size_t nElemsPerDim = 2;
+    size_t nElemsPerDim = 3;
     SparseMatrix A;
 
     Vector b, u;
@@ -123,7 +123,7 @@ int main(int argc, char** argv)
 
     std::cout << "RHS vector looks like this:" << std::endl;
    // printVectorOnGrid(b, nElemsPerDim);
-    std::cout << "\nassembled Matrix A looks like this:" << std::endl;
+   //std::cout << "\nassembled Matrix A looks like this:" << std::endl;
    // std::cout << A << std::endl;
     u.resize(b.size());
 

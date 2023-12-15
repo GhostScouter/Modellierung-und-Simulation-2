@@ -14,7 +14,7 @@ SparseMatrix::SparseMatrix()
 {
     m_rows = 0;
     m_cols = 0;
-    m_row_capacity = 4;
+    m_row_capacity = 9;
     m_values = std::vector<double>(0, m_zero);
     m_col_inds = std::vector<size_t>(m_row_capacity * m_rows, (size_t) - 1);
 }
@@ -35,17 +35,27 @@ SparseMatrix::~SparseMatrix()
 
 void SparseMatrix::printMatrix() const{
 
+    int c = 1;
     std::cout << "Hier die Sparsematrix: " << std::endl;
 
-    std::cout << m_cols << std::endl;
-    std::cout << m_rows << std::endl;
-    std::cout << m_row_capacity << std::endl;
+    std::cout << "Spaltenanzahl: " << m_cols << std::endl;
+    std::cout << "Reihenanzahl:  " << m_rows << std::endl;
+    std::cout << "Row capacity:  " << m_row_capacity << std::endl;
     for(size_t i=0; i < m_row_capacity*m_rows; i++){
         std::cout << m_col_inds[i] << ", ";
+        if (c % m_row_capacity == 0){
+            std::cout << std::endl;
+        }
+        c += 1;
     }
     std::cout << std::endl;
+    c = 1;
     for(size_t i=0; i < m_row_capacity*m_rows; i++){
         std::cout <<m_values[i] << ", ";
+        if (c % m_row_capacity == 0){
+            std::cout << std::endl;
+        }
+        c += 1;
     }
 }
 

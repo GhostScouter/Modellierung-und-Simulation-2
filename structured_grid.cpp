@@ -99,6 +99,7 @@ CoordVector<dim, std::size_t> StructuredGrid<dim>::multi_index(std::size_t ind) 
 
     for(size_t i = 0; i < dim; i++) {               // divide by the given multiplicators to derive coordinates
         results[i] = floor(index / Multiplkatoren[i]);      // Ergebnisse sind floored und daher size_t
+        index -= results[i]*Multiplkatoren[i];
     }
 
     return results;
@@ -113,24 +114,27 @@ void StructuredGrid<dim>::vertex_neighbors(std::vector<std::size_t>& neighborsOu
     // if > upper_bound oder < lowerboud => error
 
     CoordVector<dim, std::size_t> temp_coords;          // soll die multiindex Koordinaten halten
-    temp_coords = multi_index(ind);                                     // halte multiindex des fraglichen Knotens
+
 
 
     for(size_t i = 0; i < dim; i++){
-
-        if(temp_coords[i] == m_lowerBnds[i]){               //  if the multiindex is at the lower border, only add a neighbour + 1
+        temp_coords = multi_index(ind);                                     // halte multiindex des fraglichen Knotens
+        for(size_t k = 0; k < dim; ++k){
+            temp_coords[k] = multi_index(ind)[dim - k - 1];
+        }
+        if(temp_coords[i] == 0){               //  if the multiindex is at the lower border, only add a neighbour + 1
             temp_coords[i] += 1;
             neighborsOut.push_back(index(temp_coords));
         }
-        else if(temp_coords[i] == m_upperBnds[i]){          //  if the multiindex is at the upper border, only add a neighbour - 1
+        else if(temp_coords[i] == m_resolution[i]-1){          //  if the multiindex is at the upper border, only add a neighbour - 1
             temp_coords[i] -= 1;
             neighborsOut.push_back(index(temp_coords));
         }
 
         else{                                               // we add both neighbors
-            temp_coords[i] += 1;
+            temp_coords[i] -= 1;
             neighborsOut.push_back(index(temp_coords));
-            temp_coords[i] -= 2;
+            temp_coords[i] += 2;
             neighborsOut.push_back(index(temp_coords));   
         }
     }

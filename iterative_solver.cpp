@@ -101,10 +101,8 @@ bool IterativeSolver<TMatrix>::solve(vector_type& x, const vector_type& b) const
 
     size_t counter = 0;                                          // zählt Iterationen
 
-    std::cout << "bin ich mal hier?" << std::endl;
-
     while(counter < m_nit && def > m_minDef && def > (def0 * m_minRed)){
-        std::cout << "bin hier ##############" << std::endl;
+
         // counter < m_nit UND Fehler groß genug UND relative Verbesserung groß genug
 
         counter += 1;
