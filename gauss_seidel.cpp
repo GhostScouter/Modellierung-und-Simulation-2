@@ -29,11 +29,11 @@ bool GaussSeidel<TMatrix>::init(const vector_type& x)
 
 
     // ########## Setting diagonal and scaling entries down ###########
-	double factor = 0;									// will scale each row down, so that it starts with the number 1
-    for (int i = 0; i < (this->m_A->num_cols()); ++i) {			    // iterate over Matrix rows
-
+	double factor = 0;									            // will scale each row down, so that it starts with the number 1
+    for (int i = 0; i < (this->m_A->num_rows()); ++i) {			    // iterate over Matrix rows
+        typedef typename TMatrix::ConstRowIterator row_iterator_type;
         factor = this->m_A->operator()(i,i);				        // find downscaling factor (ie. matrix diagonal entry)
-        calculation_slave(i, i) = 1;			                    // build calculation_slave with diagonal of 1
+        calculation_slave(i, i) = 1;			                    // build calculation_slave with diagonal of 1 for later use
 
         std::cout << "Beginne Inversionsschritt. Faktor fuer diese Zeile: " << factor << std::endl;
         std::cout << "Schreibe in die Diagonale : " << 1/factor << std::endl;
@@ -42,11 +42,15 @@ bool GaussSeidel<TMatrix>::init(const vector_type& x)
         for (int j = 0; j < i; ++j) {			// will scale each entry down, so that the rows have a 1 at the diagonal position
         							            // Left-lower part excluding diagonal
             //std::cout << "Schritt " << i << j << " durchgefuehrt." << std::endl;
-            if(i != j){
-                std::cout << "oeffne Eintrag: " << i  << j << "  "<< Inverse(i , j) << std::endl;
-                Inverse(i, j) = this->m_A->operator()(i, j) / factor;		// scale entries down
-                std::cout << "oeffne Eintrag nach Aenderung: " << i  << j << "  "<< Inverse(i , j) << std::endl;
+
+
+            std::cout << "oeffne Eintrag Zeile: " << i  << " Spalte: " << j << " enthaelt: " << Inverse.operator()(i, j) << std::endl;
+
+            if (this->m_A->operator()(i, j) == 0){      // Flickenteppichelement
+                continue;
             }
+
+            Inverse(i, j) = this->m_A->operator()(i, j) / factor;		// scale entries down
 		}
 
         std::cout << "\n Inverse nach Schritt: " << i << "\n" << Inverse << std::endl;
@@ -56,9 +60,10 @@ bool GaussSeidel<TMatrix>::init(const vector_type& x)
     std::cout << "Inverse mit korrekter Diagonale und skalierten Eintragen in LU: \n"<< std::endl << Inverse << std::endl;
     std::cout << "Calc slave mit Diagonale gleich 1 und rest 0: \n"<< std::endl << calculation_slave << std::endl;
 
-    // Now the Inverse Matrix contains correct values along the diagonal
+    // Now the Inverse Matrix contains correct and fix values along the diagonal
+    // All other entries of Inverse are scaled down accordingly
 	// The calculation_slave has the entry 1 along the diagonal
-	// All other entries of calculation_slave are scaled down accordingly
+
 
 	for (int k = 0; k < this->m_A->num_cols()-1; k++){							// traverse diagonal entries
 
@@ -75,7 +80,7 @@ bool GaussSeidel<TMatrix>::init(const vector_type& x)
 
     std::cout << "\nInverse: " << std::endl;
     std::cout << Inverse << std::endl;
-	return true;
+    return true;
 }
 
 template <typename TMatrix>

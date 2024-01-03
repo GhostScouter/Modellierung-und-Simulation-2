@@ -33,7 +33,21 @@ SparseMatrix::SparseMatrix(std::size_t r, std::size_t c, std::size_t rowCapacity
 SparseMatrix::~SparseMatrix()
 {}
 
+
+void SparseMatrix::refactor() {
+
+    for(size_t i = 0; i < m_col_inds.size(); ++i){
+
+        if(m_col_inds[i] < (size_t) -1 && m_values[i] == 0.0){
+            m_col_inds[i] = (size_t) -1;
+        }
+    }
+}
+
+
+
 void SparseMatrix::printMatrix() const{
+    // Ausgabefunktion sehr einfach gestrickt.
 
     int c = 1;
     std::cout << "Hier die Sparsematrix: " << std::endl;
@@ -41,23 +55,40 @@ void SparseMatrix::printMatrix() const{
     std::cout << "Spaltenanzahl: " << m_cols << std::endl;
     std::cout << "Reihenanzahl:  " << m_rows << std::endl;
     std::cout << "Row capacity:  " << m_row_capacity << std::endl;
-    for(size_t i=0; i < m_row_capacity*m_rows; i++){
-        std::cout << m_col_inds[i] << ", ";
+
+
+    for(size_t i=0; i < m_row_capacity*m_rows; i++){    // iteriere über Vektorlänge
+        if (m_col_inds[i] == (size_t) -1){              // fange 18446744073709551615 ab und zeige -1 an
+            std::cout << -1 << ", ";
+        }
+        else{
+            std::cout << m_col_inds[i] << ", ";
+        }
+
+        // Alle m_row_capacity Einträge, wird eine Leerzeile generiert für die Lesbarkeit
         if (c % m_row_capacity == 0){
             std::cout << std::endl;
         }
         c += 1;
     }
+
+    // Es wurden die col_inds ausgegeben
+    // Gebe die Values aus
+
     std::cout << std::endl;
     c = 1;
-    for(size_t i=0; i < m_row_capacity*m_rows; i++){
+
+    for(size_t i=0; i < m_row_capacity*m_rows; i++){    // iteriere über Vektorlänge
         std::cout <<m_values[i] << ", ";
+
+        // Alle m_row_capacity Einträge, wird eine Leerzeile generiert für die Lesbarkeit
         if (c % m_row_capacity == 0){
             std::cout << std::endl;
         }
         c += 1;
     }
 }
+
 
 std::size_t SparseMatrix::num_rows() const
 {

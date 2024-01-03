@@ -48,8 +48,8 @@ set(SOURCES
 		util.cpp
 		vtk_exporter.cpp
         main01.cpp
-	#	main03.cpp
-		#main_test.cpp
+		main03.cpp
+		main_test.cpp
 
 )
 
@@ -57,6 +57,6 @@ add_library(modsim2 ${SOURCES} ${linkLibraries})
 
 
 ## targets
-add_executable(executable03 main01.cpp)
+add_executable(executable03 main03.cpp)
 target_link_libraries(executable03 modsim2 ${linkLibraries})
 

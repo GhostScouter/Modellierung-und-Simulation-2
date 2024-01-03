@@ -120,6 +120,7 @@ int main(int argc, char** argv)
     Vector b, u;
 
     create2dPoissonSystemWithSize(A, b, nElemsPerDim);
+    A.refactor();
 
     std::cout << "RHS vector looks like this:" << std::endl;
    // printVectorOnGrid(b, nElemsPerDim);

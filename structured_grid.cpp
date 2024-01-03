@@ -46,7 +46,7 @@ void StructuredGrid<dim>::vertex_coords(CoordVector<dim>& coordsOut, std::size_t
     temp_coords = multi_index(ind);
 
     for(size_t i = 0; i < dim; i++){
-        coordsOut[i] = m_lowerBnds[i] + temp_coords[i]*((m_upperBnds[i]-m_lowerBnds[i])/m_resolution[i]);
+        coordsOut[i] = m_lowerBnds[i] + temp_coords[i]*((m_upperBnds[i]-m_lowerBnds[i])/(m_resolution[i]-1));
         // Startpunkt des Grids plus Schritte * Schrittweite
     }
 }
@@ -64,8 +64,8 @@ std::size_t StructuredGrid<dim>::index(const CoordVector<dim, std::size_t>& vMul
 
     for(size_t i = 0; i < dim; i++){
         //std::cout << m_resolution[i] << std::endl;
-        number_of_vertices /= m_resolution[i];         // Since we want to count in the direction of the x-axis first
-        Multiplikatoren[i] = number_of_vertices;       // for a 24 vertex grid, these factors could look like this: [6,2,1]
+        number_of_vertices /= m_resolution[dim - i - 1];                      // Since we want to count in the direction of the x-axis first
+        Multiplikatoren[dim - i - 1] = number_of_vertices;          // for a 24 vertex grid, these factors could look like this: [1,2,6]
     }
 
     // with multiindex and multiplicators at hand, we can calculate the position easily
@@ -93,13 +93,13 @@ CoordVector<dim, std::size_t> StructuredGrid<dim>::multi_index(std::size_t ind) 
     size_t temp_product = num_vertices();           // we will divide resolution from this number
 
     for(size_t i = 0; i < dim; i++){
-        temp_product /= m_resolution[i];            // Since we want to start counting in the direction of the x-axis
-        Multiplkatoren[i] = temp_product;           // for a 24 vertex grind, these factors could look like this: [6,2,1]
+        temp_product /= m_resolution[dim - i - 1];                        // Since we want to start counting in the direction of the x-axis
+        Multiplkatoren[dim - i - 1] = temp_product;             // for a 24 vertex grind, these factors could look like this: [1,2,6]
     }
 
-    for(size_t i = 0; i < dim; i++) {               // divide by the given multiplicators to derive coordinates
-        results[i] = floor(index / Multiplkatoren[i]);      // Ergebnisse sind floored und daher size_t
-        index -= results[i]*Multiplkatoren[i];
+    for(size_t i = 0; i < dim; i++) {                           // divide by the given multiplicators to derive coordinates
+        results[dim - i - 1] = floor(index / Multiplkatoren[dim - i - 1]);       // Ergebnisse sind floored und daher size_t
+        index -= results[dim - i - 1]*Multiplkatoren[dim - i - 1];
     }
 
     return results;
@@ -119,9 +119,7 @@ void StructuredGrid<dim>::vertex_neighbors(std::vector<std::size_t>& neighborsOu
 
     for(size_t i = 0; i < dim; i++){
         temp_coords = multi_index(ind);                                     // halte multiindex des fraglichen Knotens
-        for(size_t k = 0; k < dim; ++k){
-            temp_coords[k] = multi_index(ind)[dim - k - 1];
-        }
+
         if(temp_coords[i] == 0){               //  if the multiindex is at the lower border, only add a neighbour + 1
             temp_coords[i] += 1;
             neighborsOut.push_back(index(temp_coords));

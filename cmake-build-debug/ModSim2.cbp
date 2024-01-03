@@ -156,7 +156,13 @@
 		</Unit>
 		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/main01.cpp">
 			<Option target="modsim2"/>
+		</Unit>
+		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/main03.cpp">
+			<Option target="modsim2"/>
 			<Option target="executable03"/>
+		</Unit>
+		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/main_test.cpp">
+			<Option target="modsim2"/>
 		</Unit>
 		<Unit filename="C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/matrix.cpp">
 			<Option target="modsim2"/>

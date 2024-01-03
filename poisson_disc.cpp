@@ -100,6 +100,7 @@ void PoissonDisc<dim, TMatrix>::assemble
 			rhs[vrt] = bndVal;
 		}
 	}
+    mat.refactor();
 }
 
 
@@ -161,6 +162,7 @@ void PoissonDisc<dim, TMatrix>::assemble
 			mat(vrt, vrt) = 1.0;
 		}
 	}
+    mat.refactor();
 }
 
 

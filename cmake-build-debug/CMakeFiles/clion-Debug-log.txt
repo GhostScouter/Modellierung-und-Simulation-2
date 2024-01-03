@@ -1,6 +1,6 @@
 "C:\Program Files\JetBrains\CLion 2023.2.2\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" -S "C:\Users\Ghost\OneDrive\Dokumente\A a Uni\M_01_Sem\Praktikum_Modellierung_und_Simulation_2\Git\Modellierung-und-Simulation-2" -B "C:\Users\Ghost\OneDrive\Dokumente\A a Uni\M_01_Sem\Praktikum_Modellierung_und_Simulation_2\Git\Modellierung-und-Simulation-2\cmake-build-debug"
 -- DEBUG     ON
 -- PARALLEL     OFF
--- Configuring done (0.8s)
--- Generating done (0.4s)
+-- Configuring done (1.7s)
+-- Generating done (0.5s)
 -- Build files have been written to: C:/Users/Ghost/OneDrive/Dokumente/A a Uni/M_01_Sem/Praktikum_Modellierung_und_Simulation_2/Git/Modellierung-und-Simulation-2/cmake-build-debug

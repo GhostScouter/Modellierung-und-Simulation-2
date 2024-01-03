@@ -31,6 +31,7 @@ class Matrix
 		/// Destructor
 		virtual ~Matrix();
 
+        void refactor(){return;}
         void printMatrix() const;
 
 		/// Return number of rows

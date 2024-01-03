@@ -44,6 +44,8 @@ void Matrix::printMatrix() const{
 
 }
 
+void refactor(){
+}
 
 std::size_t Matrix::num_rows() const
 {

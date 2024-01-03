@@ -37,6 +37,8 @@ class SparseMatrix
 		/// Destructor
 		virtual ~SparseMatrix();
 
+        void refactor();
+
         void printMatrix() const;
 
 		/// Return number of rows
