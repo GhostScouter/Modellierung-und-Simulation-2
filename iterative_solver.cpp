@@ -6,6 +6,10 @@
  */
 
 #include "iterative_solver.h"
+#include <iostream>
+#include <chrono>
+#include <ctime>
+
 
 template <typename TMatrix>
 IterativeSolver<TMatrix>::IterativeSolver(const matrix_type& mat)
@@ -75,6 +79,7 @@ void IterativeSolver<TMatrix>::set_convergence_params
 template <typename TMatrix>
 bool IterativeSolver<TMatrix>::solve(vector_type& x, const vector_type& b) const{
 
+    
     //defekt d berechnen (Vektor)
     Vector d = Vector(x.size());            // speichert d ab
     //std::cout << "d: " << d << std::endl;
